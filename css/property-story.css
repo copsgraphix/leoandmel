@@ -1,0 +1,712 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PROPERTY STORY — Pinned Scroll Narrative System
+   Three sequential pinned experiences:
+     1. #transformation-story  (450vh)
+     2. #property-map          (400vh)
+     3. #seasonal-evolution    (400vh)
+   Each section uses position:sticky internally — GSAP scrub drives every state.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Shared: Pin Container ───────────────────────────────────────────────── */
+.pin-section { position: relative; }
+
+.pin-inner {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--dark);
+  will-change: transform;
+}
+
+/* ─── Shared: Section tag (top-left label) ────────────────────────────────── */
+.ps-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 7rem 6vw 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(9,42,0,0.6) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.ps-tag-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.ps-tag-label::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.ps-tag-right {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.25);
+}
+
+/* ─── Shared: Bottom progress line ───────────────────────────────────────── */
+.ps-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  z-index: 30;
+}
+.ps-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(to right, var(--green-deep), var(--gold));
+  will-change: width;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. TRANSFORMATION STORY
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#transformation-story { height: 450vh; }
+
+/* ── Full-screen image layers ─────────────────────────────────────────────── */
+.ts-before,
+.ts-after {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  will-change: clip-path, filter, opacity;
+}
+
+.ts-before { background-image: url('../unkept house.jpeg'); }
+
+.ts-after  {
+  background-image: url('../perfectly maintained.jpeg');
+  /* starts fully hidden — GSAP reveals from bottom to top */
+}
+
+/* Vignette on both */
+.ts-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(9,42,0,0.7) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── The reveal sweep line ────────────────────────────────────────────────── */
+.ts-sweep {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 8;
+  will-change: top;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(196,162,69,0.3) 15%,
+    rgba(196,162,69,0.9) 50%,
+    rgba(196,162,69,0.3) 85%,
+    transparent 100%
+  );
+  box-shadow: 0 0 24px 4px rgba(196,162,69,0.35),
+              0 0 60px 8px rgba(196,162,69,0.12);
+}
+
+/* ── Assessment grid (Stage 2) ────────────────────────────────────────────── */
+.ts-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  will-change: opacity;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(196,162,69,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196,162,69,0.06) 1px, transparent 1px);
+  background-size: 16.667% 14.285%;
+}
+
+/* ── Zone assessment labels (Stage 2) ────────────────────────────────────── */
+.ts-zones {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  will-change: opacity;
+  pointer-events: none;
+}
+
+.ts-zone-pin {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.ts-zone-pin-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(196,162,69,0.8);
+  background: rgba(196,162,69,0.3);
+  flex-shrink: 0;
+}
+
+.ts-zone-pin-line {
+  width: 28px;
+  height: 1px;
+  background: rgba(196,162,69,0.45);
+  transform-origin: left;
+}
+
+.ts-zone-pin-text {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(196,162,69,0.8);
+  background: rgba(9,42,0,0.65);
+  padding: 0.18rem 0.5rem;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Narrative text (bottom-left) ─────────────────────────────────────────── */
+.ts-text {
+  position: absolute;
+  bottom: 9vh;
+  left: 6vw;
+  z-index: 20;
+  max-width: 56ch;
+  pointer-events: none;
+}
+
+/* Each stage is stacked absolutely, GSAP cross-fades */
+.ts-stage {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  will-change: opacity, transform;
+}
+
+.ts-act {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ts-act::before { content: ''; display: block; width: 18px; height: 1px; background: var(--gold); }
+
+.ts-stage h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.ts-stage p {
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.52);
+  max-width: 48ch;
+}
+
+/* ── Result stats (bottom-right, Stage 4) ─────────────────────────────────── */
+.ts-results {
+  position: absolute;
+  bottom: 9vh;
+  right: 6vw;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.ts-result-item { text-align: right; }
+
+.ts-result-value {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 1;
+  will-change: opacity, transform;
+}
+
+.ts-result-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  margin-top: 0.3rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. PROPERTY MAP
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#property-map { height: 400vh; }
+
+#property-map .pin-inner {
+  display: grid;
+  grid-template-columns: 60% 40%;
+}
+
+/* ── Map panel (left) ─────────────────────────────────────────────────────── */
+.pm-map-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2vw 5rem 4vw;
+  /* Subtle blueprint-style grid */
+  background:
+    linear-gradient(rgba(196,162,69,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196,162,69,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-color: #060e06;
+}
+
+.pm-svg-wrap {
+  width: 100%;
+  max-height: calc(100vh - 14rem);
+  overflow: visible;
+  will-change: opacity;
+}
+
+.pm-svg { width: 100%; height: auto; display: block; }
+
+/* ── SVG element styles ───────────────────────────────────────────────────── */
+
+/* Buildings — non-interactive */
+.pm-building {
+  fill: #0a1a0a;
+  stroke: rgba(255,255,255,0.1);
+  stroke-width: 1.5;
+}
+
+.pm-window {
+  fill: rgba(255,255,255,0.04);
+  stroke: rgba(255,255,255,0.08);
+  stroke-width: 0.5;
+}
+
+/* Zone elements — all start dim */
+.pm-zone {
+  transition: fill 0.65s ease, stroke 0.65s ease, filter 0.65s ease, opacity 0.65s ease;
+  fill: rgba(9,42,0,0.5);
+  stroke: rgba(255,255,255,0.04);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+/* Zone-specific active states */
+.pm-zone[data-zone="turf"].z-active {
+  fill: rgba(78,138,48,0.55);
+  stroke: #5a8a38;
+  stroke-width: 1.5;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(90,138,56,0.4));
+}
+
+.pm-zone[data-zone="trees"].z-active {
+  fill: rgba(22,74,18,0.8);
+  stroke: #2d5a28;
+  stroke-width: 1.5;
+  opacity: 1;
+  filter: drop-shadow(0 0 6px rgba(30,74,18,0.5));
+}
+
+.pm-zone[data-zone="hardscape"].z-active {
+  fill: rgba(196,162,69,0.3);
+  stroke: #c4a245;
+  stroke-width: 1.5;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(196,162,69,0.3));
+}
+
+.pm-zone[data-zone="beds"].z-active {
+  fill: rgba(196,162,69,0.5);
+  stroke: var(--gold);
+  stroke-width: 2;
+  opacity: 1;
+  filter: drop-shadow(0 0 6px rgba(196,162,69,0.45));
+}
+
+.pm-zone[data-zone="drainage"].z-active {
+  fill: rgba(60,100,130,0.45);
+  stroke: #5a8aaa;
+  stroke-width: 2;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(60,100,130,0.4));
+}
+
+/* "Full system" — all zones softly glow */
+.pm-zone.z-system {
+  opacity: 0.75;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Drainage path specific */
+.pm-drain-path {
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* Compass & scale */
+.pm-compass text, .pm-scale text {
+  font-family: var(--font-sans);
+  fill: rgba(255,255,255,0.3);
+}
+.pm-compass line, .pm-scale line { stroke: rgba(255,255,255,0.2); }
+.pm-compass circle { fill: rgba(9,42,0,0.8); stroke: rgba(196,162,69,0.25); }
+
+/* ── Description panel (right) ────────────────────────────────────────────── */
+.pm-desc-panel {
+  position: relative;
+  padding: 9rem 5vw 4rem 3vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  overflow: hidden;
+}
+
+.pm-desc {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 3vw;
+  right: 5vw;
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+.pm-desc-zone-color {
+  width: 28px;
+  height: 2px;
+  margin-bottom: 1.2rem;
+}
+
+.pm-desc h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+}
+
+.pm-desc > p {
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.82;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1.8rem;
+  max-width: 42ch;
+}
+
+.pm-svc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.pm-svc-list li {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.pm-svc-list li::before {
+  content: '';
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.pm-desc-coverage {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.pm-desc-coverage strong {
+  color: var(--gold);
+  font-size: 1.1rem;
+  font-weight: 400;
+  font-family: var(--font-serif);
+  letter-spacing: 0;
+  text-transform: none;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. SEASONAL EVOLUTION
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#seasonal-evolution { height: 400vh; }
+
+/* ── Season image layers ──────────────────────────────────────────────────── */
+.se-img {
+  position: absolute;
+  inset: -4%;
+  background-size: cover;
+  background-position: center;
+  will-change: opacity, filter;
+}
+
+.se-spring { background-image: url('../spring.jpeg'); }
+.se-summer { background-image: url('../summer.jpeg'); }
+.se-fall   { background-image: url('../fall.jpeg');   }
+.se-winter { background-image: url('../winter.jpeg'); }
+
+/* Dark gradient at top + bottom */
+.se-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(9,42,0,0.6)  0%,
+    rgba(9,42,0,0.1) 40%,
+    rgba(9,42,0,0.1) 60%,
+    rgba(9,42,0,0.75) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── Giant season name (background typography) ────────────────────────────── */
+.se-names {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.se-name {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-size: clamp(14vw, 18vw, 22vw);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  will-change: opacity, transform;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.se-name-spring { color: rgba(90,138,56,0.12); }
+.se-name-summer { color: rgba(196,162,69,0.12); }
+.se-name-fall   { color: rgba(180,100,40,0.12); }
+.se-name-winter { color: rgba(120,160,200,0.12); }
+
+/* ── Season content (bottom) ──────────────────────────────────────────────── */
+.se-content {
+  position: absolute;
+  bottom: 8vh;
+  left: 6vw;
+  right: 6vw;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4rem;
+  pointer-events: none;
+}
+
+.se-season-block {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  will-change: opacity, transform;
+}
+
+.se-season-eyebrow {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.se-season-eyebrow::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+}
+
+.se-spring-block .se-season-eyebrow { color: #7ab85a; }
+.se-spring-block .se-season-eyebrow::before { background: #7ab85a; }
+
+.se-summer-block .se-season-eyebrow { color: var(--gold-light); }
+.se-summer-block .se-season-eyebrow::before { background: var(--gold-light); }
+
+.se-fall-block .se-season-eyebrow { color: #d4834a; }
+.se-fall-block .se-season-eyebrow::before { background: #d4834a; }
+
+.se-winter-block .se-season-eyebrow { color: #88b4d4; }
+.se-winter-block .se-season-eyebrow::before { background: #88b4d4; }
+
+.se-season-block h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.se-season-block p {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  max-width: 38ch;
+  line-height: 1.7;
+}
+
+/* Services list (right side of seasonal section) */
+.se-svc-panel {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  will-change: opacity, transform;
+  min-width: 220px;
+}
+
+.se-svc-panel ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.se-svc-panel li {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: right;
+  flex-direction: row-reverse;
+}
+
+.se-svc-panel li::after {
+  content: '';
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.se-spring-svc li::after { background: #7ab85a; }
+.se-summer-svc li::after { background: var(--gold-light); }
+.se-fall-svc li::after   { background: #d4834a; }
+.se-winter-svc li::after { background: #88b4d4; }
+
+/* Season progress indicator */
+.se-indicator {
+  position: absolute;
+  top: 50%;
+  right: 3vw;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+  pointer-events: none;
+}
+
+.se-ind-pip {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: background 0.5s ease, transform 0.5s var(--ease-out), height 0.5s ease;
+}
+
+.se-ind-pip.active {
+  height: 24px;
+  border-radius: 2px;
+}
+
+.se-ind-pip-spring.active  { background: #7ab85a; }
+.se-ind-pip-summer.active  { background: var(--gold-light); }
+.se-ind-pip-fall.active    { background: #d4834a; }
+.se-ind-pip-winter.active  { background: #88b4d4; }
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  #property-map .pin-inner { grid-template-columns: 1fr; }
+  .pm-desc-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 5vw 4rem;
+    background: linear-gradient(to top, rgba(9,42,0,0.98) 0%, rgba(9,42,0,0.9) 100%);
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    max-height: 45%;
+    overflow: hidden;
+  }
+  .pm-desc { position: relative; top: auto; transform: none; left: 0; right: 0; }
+  .pm-map-panel { padding: 8rem 3vw 55% 3vw; }
+}
+
+@media (max-width: 768px) {
+  .ts-results { display: none; }
+  .se-name { font-size: 20vw; }
+  .se-svc-panel { display: none; }
+  .ts-stage h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+}

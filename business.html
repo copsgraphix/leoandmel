@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="L&M Services — Commercial & Government Property Maintenance. A cinematic scroll experience through our process, property systems, and seasonal coverage.">
+  <title>L&M Services | Commercial &amp; Government</title>
+  <link rel="icon" href="favicon (1).svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/business.css">
+  <link rel="stylesheet" href="css/property-story.css">
+  <link rel="stylesheet" href="css/case-studies.css">
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────────────────── -->
+  <nav id="site-nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-back">← Back</a>
+    <a href="index.html">
+      <img src="logo.svg" alt="L&M Services" class="nav-logo" loading="eager">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#transformation-story">Process</a></li>
+      <li><a href="#property-map">Services</a></li>
+      <li><a href="#seasonal-evolution">Seasons</a></li>
+      <li><a href="#case-studies">Case Studies</a></li>
+      <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <main>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         HERO  (100vh — entrance into the narrative)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="hero" aria-labelledby="hero-heading">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <p class="hero-eyebrow">Commercial &amp; Government Property Maintenance</p>
+        <h1 id="hero-heading">
+          The Standard<br>
+          Every Property<br>
+          <em>Deserves.</em>
+        </h1>
+        <p class="hero-sub">
+          L&amp;M Services transforms neglected commercial properties into
+          maintained assets — year-round, without compromise. Scroll to experience how.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">Request a Quote →</a>
+          <a href="#transformation-story" class="btn-secondary">Our Process ↓</a>
+        </div>
+      </div>
+
+      <div class="hero-scroll" aria-hidden="true">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         1. TRANSFORMATION STORY  (450vh pinned)
+         Scroll through: Before state → Assessment → Sweep reveal → After
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="transformation-story" class="pin-section" aria-label="Property transformation story">
+      <div class="pin-inner">
+
+        <!-- Images -->
+        <div class="ts-before" aria-hidden="true"></div>
+        <div class="ts-after"  aria-hidden="true"></div>
+
+        <!-- Vignette depth -->
+        <div class="ts-vignette" aria-hidden="true"></div>
+
+        <!-- The sweep reveal line -->
+        <div class="ts-sweep" aria-hidden="true"></div>
+
+        <!-- Assessment grid (Stage 2) -->
+        <div class="ts-grid" aria-hidden="true"></div>
+
+        <!-- Zone assessment labels (Stage 2) -->
+        <div class="ts-zones" aria-hidden="true">
+          <div class="ts-zone-pin" style="top:28%;left:18%">
+            <div class="ts-zone-pin-dot"></div>
+            <div class="ts-zone-pin-line"></div>
+            <div class="ts-zone-pin-text">Zone A — Turf</div>
+          </div>
+          <div class="ts-zone-pin" style="top:44%;left:58%">
+            <div class="ts-zone-pin-dot"></div>
+            <div class="ts-zone-pin-line"></div>
+            <div class="ts-zone-pin-text">Zone B — Drainage</div>
+          </div>
+          <div class="ts-zone-pin" style="top:18%;left:72%">
+            <div class="ts-zone-pin-dot"></div>
+            <div class="ts-zone-pin-line"></div>
+            <div class="ts-zone-pin-text">Zone C — Canopy</div>
+          </div>
+          <div class="ts-zone-pin" style="top:62%;left:32%">
+            <div class="ts-zone-pin-dot"></div>
+            <div class="ts-zone-pin-line"></div>
+            <div class="ts-zone-pin-text">Zone D — Hardscape</div>
+          </div>
+          <div class="ts-zone-pin" style="top:72%;left:80%">
+            <div class="ts-zone-pin-dot"></div>
+            <div class="ts-zone-pin-line"></div>
+            <div class="ts-zone-pin-text">Zone E — Beds</div>
+          </div>
+        </div>
+
+        <!-- Top section label -->
+        <div class="ps-tag" aria-hidden="true">
+          <span class="ps-tag-label">Property Transformation</span>
+          <span class="ps-tag-right">Scroll to progress</span>
+        </div>
+
+        <!-- Narrative stages — stacked, GSAP cross-fades between them -->
+        <div class="ts-text">
+
+          <div class="ts-stage ts-s1">
+            <p class="ts-act">01 — Before</p>
+            <h2>We see what others overlook.</h2>
+            <p>Before a plan. Before a contract. We walk every inch of your property and document what years of deferred maintenance have compounded.</p>
+          </div>
+
+          <div class="ts-stage ts-s2">
+            <p class="ts-act">02 — Assessment</p>
+            <h2>Mapped. Graded. Prioritized.</h2>
+            <p>Every zone catalogued — turf condition, drainage slope, soil health, structural obstructions. A phased remediation plan built before a single blade is cut.</p>
+          </div>
+
+          <div class="ts-stage ts-s3">
+            <p class="ts-act">03 — Transformation</p>
+            <h2>Systematic. Not cosmetic.</h2>
+            <p>Zone by zone. Each treatment informed by the assessment, each improvement setting the foundation for the next. This is how permanent change is made.</p>
+          </div>
+
+          <div class="ts-stage ts-s4">
+            <p class="ts-act">04 — The Standard</p>
+            <h2>Achieved in one season.<br>Maintained in every one after.</h2>
+            <p>Not a one-time transformation. A maintained asset — every week, every season, every year.</p>
+          </div>
+
+        </div><!-- /ts-text -->
+
+        <!-- Result stats (appear at Stage 4) -->
+        <div class="ts-results" aria-hidden="true">
+          <div class="ts-result-item">
+            <div class="ts-result-value">15+</div>
+            <div class="ts-result-label">Years of Service</div>
+          </div>
+          <div class="ts-result-item">
+            <div class="ts-result-value">200+</div>
+            <div class="ts-result-label">Properties Managed</div>
+          </div>
+          <div class="ts-result-item">
+            <div class="ts-result-value">52</div>
+            <div class="ts-result-label">Weeks / Year Active</div>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="ps-progress"><div class="ts-progress-fill ps-progress-fill"></div></div>
+
+      </div><!-- /pin-inner -->
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         2. PROPERTY MAP  (400vh pinned)
+         SVG schematic — 5 zones activate sequentially with scroll
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="property-map" class="pin-section" aria-label="Interactive property service map">
+      <div class="pin-inner">
+
+        <!-- Top label -->
+        <div class="ps-tag" aria-hidden="true">
+          <span class="ps-tag-label">Property Systems</span>
+          <span class="ps-tag-right">Scroll through each zone</span>
+        </div>
+
+        <!-- Left: SVG map -->
+        <div class="pm-map-panel">
+          <div class="pm-svg-wrap">
+            <svg class="pm-svg" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+              <!-- ── ZONE 1: TURF ──────────────────────────────────── -->
+              <polygon class="pm-zone" data-zone="turf"
+                points="0,0 50,0 50,390 240,390 240,170 50,170 50,45 240,45 240,0"/>
+              <!-- between left wing and main building -->
+              <rect class="pm-zone" data-zone="turf" x="240" y="0" width="90" height="45"/>
+              <rect class="pm-zone" data-zone="turf" x="240" y="170" width="90" height="220"/>
+              <!-- right side mirror -->
+              <polygon class="pm-zone" data-zone="turf"
+                points="950,0 1000,0 1000,390 760,390 760,170 950,170 950,45 760,45 760,0"/>
+              <rect class="pm-zone" data-zone="turf" x="670" y="0" width="90" height="45"/>
+              <rect class="pm-zone" data-zone="turf" x="670" y="170" width="90" height="220"/>
+              <!-- south lawn -->
+              <rect class="pm-zone" data-zone="turf" x="0" y="390" width="1000" height="115"/>
+
+              <!-- ── ZONE 2: TREES ─────────────────────────────────── -->
+              <circle class="pm-zone" data-zone="trees" cx="85"  cy="80"  r="32"/>
+              <circle class="pm-zone" data-zone="trees" cx="30"  cy="260" r="22"/>
+              <circle class="pm-zone" data-zone="trees" cx="915" cy="80"  r="32"/>
+              <circle class="pm-zone" data-zone="trees" cx="970" cy="260" r="22"/>
+              <circle class="pm-zone" data-zone="trees" cx="185" cy="455" r="26"/>
+              <circle class="pm-zone" data-zone="trees" cx="380" cy="460" r="20"/>
+              <circle class="pm-zone" data-zone="trees" cx="500" cy="468" r="16"/>
+              <circle class="pm-zone" data-zone="trees" cx="620" cy="460" r="20"/>
+              <circle class="pm-zone" data-zone="trees" cx="815" cy="455" r="26"/>
+
+              <!-- ── ZONE 3: HARDSCAPE ─────────────────────────────── -->
+              <!-- main entrance walkway (vertical) -->
+              <rect class="pm-zone" data-zone="hardscape" x="455" y="195" width="90" height="195"/>
+              <!-- entry plaza -->
+              <rect class="pm-zone" data-zone="hardscape" x="375" y="385" width="250" height="52"/>
+              <!-- connecting path left wing to main building -->
+              <rect class="pm-zone" data-zone="hardscape" x="240" y="158" width="90" height="22"/>
+              <!-- connecting path right wing to main building -->
+              <rect class="pm-zone" data-zone="hardscape" x="670" y="158" width="90" height="22"/>
+              <!-- road approach outbound -->
+              <rect class="pm-zone" data-zone="hardscape" x="455" y="437" width="90" height="130"/>
+
+              <!-- ── ZONE 4: LANDSCAPE BEDS ────────────────────────── -->
+              <!-- along south face of main building -->
+              <rect class="pm-zone" data-zone="beds" x="330" y="192" width="340" height="16"/>
+              <!-- along south face of left wing -->
+              <rect class="pm-zone" data-zone="beds" x="50"  y="168" width="190" height="13"/>
+              <!-- along south face of right wing -->
+              <rect class="pm-zone" data-zone="beds" x="760" y="168" width="190" height="13"/>
+              <!-- flanking entry plaza -->
+              <ellipse class="pm-zone" data-zone="beds" cx="428" cy="362" rx="38" ry="14"/>
+              <ellipse class="pm-zone" data-zone="beds" cx="572" cy="362" rx="38" ry="14"/>
+
+              <!-- ── ZONE 5: DRAINAGE ──────────────────────────────── -->
+              <path class="pm-zone pm-drain-path" data-zone="drainage" stroke-width="14"
+                d="M 0,508 C 120,488 260,525 420,510 S 620,490 760,510 S 900,525 1000,505"/>
+              <circle class="pm-zone" data-zone="drainage" cx="240" cy="506" r="13"/>
+              <circle class="pm-zone" data-zone="drainage" cx="500" cy="500" r="10"/>
+              <circle class="pm-zone" data-zone="drainage" cx="760" cy="506" r="13"/>
+
+              <!-- ── BUILDINGS (non-zone, visual anchors) ──────────── -->
+              <rect class="pm-building" x="330" y="30"  width="340" height="162" rx="3"/>
+              <rect class="pm-building" x="50"  y="45"  width="190" height="123" rx="3"/>
+              <rect class="pm-building" x="760" y="45"  width="190" height="123" rx="3"/>
+
+              <!-- Window detail: main building -->
+              <rect class="pm-window" x="370" y="65"  width="22" height="32"/>
+              <rect class="pm-window" x="410" y="65"  width="22" height="32"/>
+              <rect class="pm-window" x="450" y="65"  width="22" height="32"/>
+              <rect class="pm-window" x="490" y="65"  width="22" height="32"/>
+              <rect class="pm-window" x="530" y="65"  width="22" height="32"/>
+              <rect class="pm-window" x="570" y="65"  width="22" height="32"/>
+              <rect class="pm-window" x="610" y="65"  width="22" height="32"/>
+              <rect class="pm-window" x="370" y="115" width="22" height="32"/>
+              <rect class="pm-window" x="410" y="115" width="22" height="32"/>
+              <rect class="pm-window" x="490" y="115" width="22" height="32"/>
+              <rect class="pm-window" x="570" y="115" width="22" height="32"/>
+              <rect class="pm-window" x="610" y="115" width="22" height="32"/>
+              <!-- Window detail: left wing -->
+              <rect class="pm-window" x="80"  y="80"  width="18" height="28"/>
+              <rect class="pm-window" x="112" y="80"  width="18" height="28"/>
+              <rect class="pm-window" x="144" y="80"  width="18" height="28"/>
+              <rect class="pm-window" x="176" y="80"  width="18" height="28"/>
+              <!-- Window detail: right wing -->
+              <rect class="pm-window" x="790" y="80"  width="18" height="28"/>
+              <rect class="pm-window" x="822" y="80"  width="18" height="28"/>
+              <rect class="pm-window" x="854" y="80"  width="18" height="28"/>
+              <rect class="pm-window" x="886" y="80"  width="18" height="28"/>
+
+              <!-- ── COMPASS ─────────────────────────────────────── -->
+              <g class="pm-compass" transform="translate(960,46)">
+                <circle r="20" stroke-width="1"/>
+                <text x="0" y="-7" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" font-weight="700">N</text>
+                <line x1="0" y1="-13" x2="0" y2="13" stroke-width="1"/>
+                <line x1="-13" y1="0" x2="13" y2="0" stroke-width="1"/>
+                <polygon points="0,-13 -3,-4 0,-7 3,-4" fill="rgba(196,162,69,0.7)"/>
+              </g>
+
+              <!-- ── SCALE BAR ───────────────────────────────────── -->
+              <g class="pm-scale" transform="translate(28,535)">
+                <line x1="0" y1="0" x2="80" y2="0" stroke-width="1"/>
+                <line x1="0" y1="-5" x2="0" y2="5" stroke-width="1"/>
+                <line x1="80" y1="-5" x2="80" y2="5" stroke-width="1"/>
+                <text x="40" y="-9" text-anchor="middle" font-size="9" font-family="Inter,sans-serif">50 m</text>
+              </g>
+
+            </svg>
+          </div>
+        </div><!-- /pm-map-panel -->
+
+        <!-- Right: Zone description panels -->
+        <div class="pm-desc-panel">
+
+          <div class="pm-desc pm-desc-turf">
+            <div class="pm-desc-zone-color" style="background:#5a8a38;"></div>
+            <h3>Turf &amp; Lawn Management</h3>
+            <p>The foundation of every commercial property's first impression. We manage turf systems at the precision and scale they require — not a residential approach applied at commercial volume.</p>
+            <ul class="pm-svc-list">
+              <li>Commercial mowing &amp; edging programs</li>
+              <li>Fertilization &amp; pre-emergent programs</li>
+              <li>Aeration, overseeding &amp; renovation</li>
+              <li>Drought stress &amp; weed management</li>
+            </ul>
+            <div class="pm-desc-coverage">
+              Typical site coverage<strong>~45% of total property</strong>
+            </div>
+          </div>
+
+          <div class="pm-desc pm-desc-trees">
+            <div class="pm-desc-zone-color" style="background:#2d5a28;"></div>
+            <h3>Trees &amp; Canopy</h3>
+            <p>Mature trees are assets. Unmaintained trees are liabilities. We manage canopy health, structure, and safety across every property we serve — before they become a code or insurance issue.</p>
+            <ul class="pm-svc-list">
+              <li>Structural pruning &amp; clearance trimming</li>
+              <li>Canopy health &amp; fertilization programs</li>
+              <li>Storm damage assessment &amp; response</li>
+              <li>Young tree training &amp; staking</li>
+            </ul>
+            <div class="pm-desc-coverage">
+              Typical site coverage<strong>~12% of total property</strong>
+            </div>
+          </div>
+
+          <div class="pm-desc pm-desc-hardscape">
+            <div class="pm-desc-zone-color" style="background:#c4a245;"></div>
+            <h3>Hardscape &amp; Access</h3>
+            <p>Walkways, entries, and paved surfaces are how clients and visitors physically experience your property. We keep them clean, edged, safe, and well-defined year-round.</p>
+            <ul class="pm-svc-list">
+              <li>Pressure washing &amp; surface cleaning</li>
+              <li>Edging, curb detailing &amp; stripe lines</li>
+              <li>Seasonal salt &amp; debris removal</li>
+              <li>Surface inspection &amp; crack monitoring</li>
+            </ul>
+            <div class="pm-desc-coverage">
+              Typical site coverage<strong>~18% of total property</strong>
+            </div>
+          </div>
+
+          <div class="pm-desc pm-desc-beds">
+            <div class="pm-desc-zone-color" style="background:#c4a245;"></div>
+            <h3>Landscape Beds</h3>
+            <p>Beds define the transition between built and natural environments. A well-maintained bed communicates institutional care throughout an entire campus — they are never an afterthought.</p>
+            <ul class="pm-svc-list">
+              <li>Seasonal color planting programs</li>
+              <li>Mulch installation &amp; refresh (annual)</li>
+              <li>Weed control &amp; bed edging</li>
+              <li>Perennial, annual &amp; shrub management</li>
+            </ul>
+            <div class="pm-desc-coverage">
+              Typical site coverage<strong>~8% of total property</strong>
+            </div>
+          </div>
+
+          <div class="pm-desc pm-desc-drainage">
+            <div class="pm-desc-zone-color" style="background:#5a8aaa;"></div>
+            <h3>Drainage &amp; Infrastructure</h3>
+            <p>Drainage failures compound every other landscape problem. We address stormwater infrastructure as a primary system — not a remediation project after flooding has already damaged the property.</p>
+            <ul class="pm-svc-list">
+              <li>Storm drain &amp; catch basin maintenance</li>
+              <li>Grade correction &amp; slope remediation</li>
+              <li>French drain &amp; channel installation</li>
+              <li>Post-storm damage response team</li>
+            </ul>
+            <div class="pm-desc-coverage">
+              Typical site coverage<strong>Perimeter &amp; infrastructure</strong>
+            </div>
+          </div>
+
+          <div class="pm-desc pm-desc-system">
+            <div class="pm-desc-zone-color" style="background:linear-gradient(to right,#5a8a38,#c4a245);"></div>
+            <h3>The Full Program.</h3>
+            <p>Every zone. Every season. A single maintenance partner who understands your entire property as an integrated system — not a collection of separate contracts.</p>
+            <ul class="pm-svc-list">
+              <li>Unified property maintenance contract</li>
+              <li>Dedicated account manager per property</li>
+              <li>Monthly service reports &amp; documentation</li>
+              <li>24-hour storm response coverage</li>
+            </ul>
+            <div class="pm-desc-coverage">
+              Total program coverage<strong>100% of property — 52 weeks</strong>
+            </div>
+          </div>
+
+        </div><!-- /pm-desc-panel -->
+
+        <!-- Progress bar -->
+        <div class="ps-progress"><div class="pm-progress-fill ps-progress-fill"></div></div>
+
+      </div><!-- /pin-inner -->
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         3. SEASONAL EVOLUTION  (400vh pinned)
+         One scene — four seasons — driven entirely by scroll
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="seasonal-evolution" class="pin-section" aria-label="Seasonal service coverage">
+      <div class="pin-inner">
+
+        <!-- Season image layers — stacked, GSAP controls opacity/filter -->
+        <div class="se-img se-spring" aria-hidden="true"></div>
+        <div class="se-img se-summer" aria-hidden="true"></div>
+        <div class="se-img se-fall"   aria-hidden="true"></div>
+        <div class="se-img se-winter" aria-hidden="true"></div>
+
+        <!-- Gradient overlay -->
+        <div class="se-gradient" aria-hidden="true"></div>
+
+        <!-- Season name typography (background) -->
+        <div class="se-names" aria-hidden="true">
+          <div class="se-name se-name-spring">Spring</div>
+          <div class="se-name se-name-summer">Summer</div>
+          <div class="se-name se-name-fall">Fall</div>
+          <div class="se-name se-name-winter">Winter</div>
+        </div>
+
+        <!-- Top label -->
+        <div class="ps-tag" aria-hidden="true">
+          <span class="ps-tag-label">Year-Round Coverage</span>
+          <span class="ps-tag-right">52 weeks / year</span>
+        </div>
+
+        <!-- Side pip indicator -->
+        <div class="se-indicator" aria-hidden="true">
+          <div class="se-ind-pip se-ind-pip-spring"></div>
+          <div class="se-ind-pip se-ind-pip-summer"></div>
+          <div class="se-ind-pip se-ind-pip-fall"></div>
+          <div class="se-ind-pip se-ind-pip-winter"></div>
+        </div>
+
+        <!-- Season content panels -->
+        <div class="se-content">
+
+          <!-- Spring -->
+          <div class="se-season-block se-spring-block">
+            <p class="se-season-eyebrow">Spring</p>
+            <h3>Awakening &amp;<br>Renewal</h3>
+            <p>The season of rehabilitation. We clear, treat, and prepare every surface for the growing year ahead.</p>
+          </div>
+
+          <!-- Summer -->
+          <div class="se-season-block se-summer-block">
+            <p class="se-season-eyebrow">Summer</p>
+            <h3>Growth &amp;<br>Precision</h3>
+            <p>At peak growth, consistency is everything. Weekly programs maintain the standard through the most demanding season.</p>
+          </div>
+
+          <!-- Fall -->
+          <div class="se-season-block se-fall-block">
+            <p class="se-season-eyebrow">Fall</p>
+            <h3>Preparation &amp;<br>Protection</h3>
+            <p>Not just leaf removal. A structured seasonal program that protects the property through winter and sets the stage for spring.</p>
+          </div>
+
+          <!-- Winter -->
+          <div class="se-season-block se-winter-block">
+            <p class="se-season-eyebrow">Winter</p>
+            <h3>Safety &amp;<br>Response</h3>
+            <p>When others shut down, we activate. Ice management, snow removal, and storm response — from first flake to last thaw.</p>
+          </div>
+
+          <!-- Service lists (right side) -->
+          <div class="se-svc-panel se-spring-svc">
+            <ul>
+              <li>Site cleanup &amp; debris removal</li>
+              <li>Pre-emergent weed treatment</li>
+              <li>Aeration &amp; overseeding</li>
+              <li>Mulch installation</li>
+              <li>Irrigation start-up &amp; check</li>
+            </ul>
+          </div>
+
+          <div class="se-svc-panel se-summer-svc">
+            <ul>
+              <li>Weekly precision mowing</li>
+              <li>Irrigation management</li>
+              <li>Heat &amp; drought stress treatment</li>
+              <li>Pest &amp; weed control</li>
+              <li>Monthly bed maintenance</li>
+            </ul>
+          </div>
+
+          <div class="se-svc-panel se-fall-svc">
+            <ul>
+              <li>Leaf removal programs</li>
+              <li>Fall fertilization &amp; overseeding</li>
+              <li>Tree &amp; shrub pruning</li>
+              <li>Winterization prep</li>
+              <li>Final mow &amp; cleanup</li>
+            </ul>
+          </div>
+
+          <div class="se-svc-panel se-winter-svc">
+            <ul>
+              <li>Snow &amp; ice management</li>
+              <li>Salt &amp; de-icing programs</li>
+              <li>Walkway &amp; entry clearance</li>
+              <li>24hr storm response</li>
+              <li>Property condition monitoring</li>
+            </ul>
+          </div>
+
+        </div><!-- /se-content -->
+
+        <!-- Progress bar -->
+        <div class="ps-progress"><div class="se-progress-fill ps-progress-fill"></div></div>
+
+      </div><!-- /pin-inner -->
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         CASE STUDIES  (500vh pinned — unchanged)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="case-studies" aria-label="Case studies scroll story">
+      <div class="cs-inner">
+
+        <div class="cs-images" aria-hidden="true">
+          <div class="cs-img cs-img-1" style="background-image:url('office park.jpeg');"></div>
+          <div class="cs-img cs-img-2" style="background-image:url('flower bed.jpeg'); background-position:center 30%;"></div>
+          <div class="cs-img cs-img-3" style="background-image:url('drainage.jpeg');"></div>
+          <div class="cs-img-gradient"></div>
+        </div>
+
+        <div class="cs-label-bar">
+          <span class="cs-section-tag">Case Studies</span>
+          <div class="cs-dot-nav" role="tablist" aria-label="Case study navigation">
+            <button class="cs-dot active" role="tab" aria-label="Case 1" aria-selected="true"></button>
+            <button class="cs-dot"        role="tab" aria-label="Case 2" aria-selected="false"></button>
+            <button class="cs-dot"        role="tab" aria-label="Case 3" aria-selected="false"></button>
+          </div>
+          <span class="cs-counter"><span class="cs-current">01</span>&thinsp;/&thinsp;03</span>
+        </div>
+
+        <div class="cs-panels">
+
+          <div class="cs-panel cs-panel-1">
+            <p class="cs-num" aria-hidden="true">01</p>
+            <h2 class="cs-title">
+              <span class="cs-title-line">From Overgrown</span>
+              <span class="cs-title-line cs-title-accent">To Outstanding.</span>
+            </h2>
+            <div class="cs-client-block">
+              <span class="cs-client-name">Eastview Office Park</span>
+              <span class="cs-client-type">Commercial Campus &middot; 14 Acres</span>
+            </div>
+            <div class="cs-stats" role="list">
+              <div class="cs-stat" role="listitem"><strong>14</strong><span>Acres<br>Maintained</span></div>
+              <div class="cs-stat" role="listitem"><strong>3yr</strong><span>Ongoing<br>Contract</span></div>
+              <div class="cs-stat" role="listitem"><strong>+40%</strong><span>Tenant<br>Satisfaction</span></div>
+            </div>
+            <div class="cs-story">
+              <p class="cs-line">A neglected 14-acre commercial campus — degraded turf, failing drainage infrastructure, overgrown beds losing the property clients.</p>
+              <p class="cs-line">We deployed a phased rehabilitation: correcting drainage first, amending soil, then executing a full landscape renovation over one growing season.</p>
+              <p class="cs-line">The campus is now the flagship property in its management portfolio — <strong>a measurable asset, not a liability.</strong></p>
+            </div>
+          </div>
+
+          <div class="cs-panel cs-panel-2">
+            <p class="cs-num" aria-hidden="true">02</p>
+            <h2 class="cs-title">
+              <span class="cs-title-line">52 Weeks.</span>
+              <span class="cs-title-line cs-title-accent">Zero Gaps.</span>
+            </h2>
+            <div class="cs-client-block">
+              <span class="cs-client-name">Riverside Government Center</span>
+              <span class="cs-client-type">Government Facility &middot; Year-Round Program</span>
+            </div>
+            <div class="cs-stats" role="list">
+              <div class="cs-stat" role="listitem"><strong>52</strong><span>Weeks<br>Active</span></div>
+              <div class="cs-stat" role="listitem"><strong>4</strong><span>Seasons<br>Covered</span></div>
+              <div class="cs-stat" role="listitem"><strong>100%</strong><span>On-Time<br>Record</span></div>
+            </div>
+            <div class="cs-story">
+              <p class="cs-line">A government facility requiring uninterrupted grounds maintenance year-round — with zero tolerance for missed service windows or visible neglect.</p>
+              <p class="cs-line">L&amp;M built a 52-week rotating program: spring cleanup and seeding, summer precision turf management, fall leaf programs, and full winter snow and ice response.</p>
+              <p class="cs-line">Five contract renewals. Not a single missed week. <strong>The standard all government properties deserve.</strong></p>
+            </div>
+          </div>
+
+          <div class="cs-panel cs-panel-3">
+            <p class="cs-num" aria-hidden="true">03</p>
+            <h2 class="cs-title">
+              <span class="cs-title-line">Infrastructure</span>
+              <span class="cs-title-line cs-title-accent">Meets Beauty.</span>
+            </h2>
+            <div class="cs-client-block">
+              <span class="cs-client-name">Harborview Mixed-Use Development</span>
+              <span class="cs-client-type">Commercial &middot; Drainage + Landscape</span>
+            </div>
+            <div class="cs-stats" role="list">
+              <div class="cs-stat" role="listitem"><strong>8</strong><span>Drainage<br>Systems</span></div>
+              <div class="cs-stat" role="listitem"><strong>2mo</strong><span>Full<br>Turnaround</span></div>
+              <div class="cs-stat" role="listitem"><strong>0</strong><span>Flooding<br>Incidents</span></div>
+            </div>
+            <div class="cs-story">
+              <p class="cs-line">A mixed-use development suffering from chronic flooding, eroded walkways, and a landscape deterring retail tenants and foot traffic.</p>
+              <p class="cs-line">We designed and installed a complete stormwater management system, rebuilt eight drainage channels, and transformed the surrounding grounds into a landmark landscape.</p>
+              <p class="cs-line">Zero flooding incidents since installation. <strong>Full occupancy achieved within six months.</strong></p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="cs-progress-bar" aria-hidden="true"><div class="cs-progress-fill"></div></div>
+        <div class="cs-scroll-nudge" aria-hidden="true">
+          <span>Keep scrolling</span>
+          <div class="cs-nudge-line"></div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         CONTACT  (normal section)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <p class="section-label reveal">Get in Touch</p>
+          <h2 id="contact-heading" class="reveal reveal-delay-1">
+            Let's Talk<br>About Your<br><em>Property.</em>
+          </h2>
+          <p class="reveal reveal-delay-2">
+            We respond to all commercial inquiries within one business day.
+            Tell us about your property and we'll put together a tailored maintenance program.
+          </p>
+          <div class="contact-details">
+            <div class="contact-item reveal reveal-delay-2">
+              <span class="contact-item-icon" aria-hidden="true">📞</span>
+              <div class="contact-item-text">
+                <strong>Phone</strong>
+                <a href="tel:+1234567890">(123) 456-7890</a>
+              </div>
+            </div>
+            <div class="contact-item reveal reveal-delay-3">
+              <span class="contact-item-icon" aria-hidden="true">✉️</span>
+              <div class="contact-item-text">
+                <strong>Email</strong>
+                <a href="mailto:info@landmservices.com">info@landmservices.com</a>
+              </div>
+            </div>
+            <div class="contact-item reveal reveal-delay-3">
+              <span class="contact-item-icon" aria-hidden="true">🕐</span>
+              <div class="contact-item-text">
+                <strong>Hours</strong>
+                <span>Mon–Fri: 7am – 6pm</span>
+              </div>
+            </div>
+            <div class="contact-item reveal reveal-delay-4">
+              <span class="contact-item-icon" aria-hidden="true">📍</span>
+              <div class="contact-item-text">
+                <strong>Service Area</strong>
+                <span>Greater Metropolitan Area</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form reveal reveal-delay-1" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" placeholder="John Smith" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="company">Company / Organization</label>
+              <input type="text" id="company" name="company" placeholder="Acme Corp">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="john@company.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890" autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="property-type">Property Type</label>
+            <select id="property-type" name="property_type" required>
+              <option value="" disabled selected>Select property type</option>
+              <option value="office-park">Office Park / Campus</option>
+              <option value="government">Government Facility</option>
+              <option value="hoa">HOA / Community</option>
+              <option value="retail">Retail / Shopping Center</option>
+              <option value="industrial">Industrial Property</option>
+              <option value="other">Other Commercial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Tell Us About Your Property</label>
+            <textarea id="message" name="message" placeholder="Property size, current challenges, services needed…"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Inquiry →</button>
+          <p class="form-note">We'll follow up within 1 business day.</p>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────────── -->
+  <footer>
+    <img src="logo.svg" alt="L&M Services" class="footer-logo" loading="lazy">
+    <p class="footer-copy">&copy; <span id="footer-year"></span> L&amp;M Services. All rights reserved.</p>
+    <ul class="footer-links">
+      <li><a href="#transformation-story">Process</a></li>
+      <li><a href="#property-map">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="personal.html">Residential</a></li>
+    </ul>
+  </footer>
+
+  <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/business.js"></script>
+  <script src="js/property-story.js"></script>
+  <script src="js/case-studies.js"></script>
+</body>
+</html>

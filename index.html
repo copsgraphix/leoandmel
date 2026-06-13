@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="L&M Services — Commercial & Residential Property Maintenance">
+  <title>L&M Services | Property Maintenance</title>
+  <link rel="icon" href="favicon (1).svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/gate.css">
+</head>
+<body>
+
+  <!-- Center logo -->
+  <div class="gate-center-logo">
+    <img src="logo.svg" alt="L&M Services" loading="eager">
+  </div>
+
+  <!-- Experience Gate -->
+  <div id="gate">
+
+    <!-- Left: Business / Commercial -->
+    <div class="gate-side" id="business-side"
+         role="button" tabindex="0"
+         aria-label="Enter Business Experience"
+         onclick="selectExperience('business')"
+         onkeydown="if(event.key==='Enter')selectExperience('business')">
+
+      <div class="side-bg"
+           style="background-image: url('office park.jpeg');"
+           aria-hidden="true"></div>
+      <div class="side-overlay" aria-hidden="true"></div>
+
+      <div class="side-content">
+        <p class="side-eyebrow">Commercial &amp; Government</p>
+        <h2>Property&nbsp;<br>Maintenance</h2>
+        <p>For organizations managing<br>large-scale properties.</p>
+        <button class="gate-cta" tabindex="-1" aria-hidden="true">
+          Enter Business Experience
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="gate-divider" aria-hidden="true"></div>
+
+    <!-- Right: Personal / Residential -->
+    <div class="gate-side" id="personal-side"
+         role="button" tabindex="0"
+         aria-label="Enter Personal Experience"
+         onclick="selectExperience('personal')"
+         onkeydown="if(event.key==='Enter')selectExperience('personal')">
+
+      <div class="side-bg"
+           style="background-image: url('perfectly maintained.jpeg');"
+           aria-hidden="true"></div>
+      <div class="side-overlay" aria-hidden="true"></div>
+
+      <div class="side-content">
+        <p class="side-eyebrow">Personal &amp; Residential</p>
+        <h2>Property&nbsp;<br>Care</h2>
+        <p>For residential and<br>small property needs.</p>
+        <button class="gate-cta" tabindex="-1" aria-hidden="true">
+          Enter Personal Experience
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom label -->
+  <div class="gate-choose-label" aria-hidden="true">
+    <span>Choose your experience</span>
+  </div>
+
+  <script src="js/gate.js"></script>
+</body>
+</html>

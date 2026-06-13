@@ -1,0 +1,355 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   CASE STUDIES — Scroll Story System
+   Architecture: 500vh scroll space → sticky inner (100vh) → GSAP scrub timeline
+   ───────────────────────────────────────────────────────────────────────────── */
+
+#case-studies {
+  height: 500vh;
+  position: relative;
+}
+
+/* Sticky viewport container */
+.cs-inner {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--dark);
+}
+
+/* ── Image layer ──────────────────────────────────────────────────────────── */
+.cs-images {
+  position: absolute;
+  inset: 0;
+  left: 0;
+  width: 60%;
+}
+
+.cs-img {
+  position: absolute;
+  inset: -4%;
+  background-size: cover;
+  background-position: center;
+  will-change: clip-path, opacity, filter;
+}
+
+/* Right-edge gradient merges image into content panel */
+.cs-img-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(9, 42, 0, 0.1)  0%,
+    rgba(9, 42, 0, 0.45) 55%,
+    rgba(9, 42, 0, 1)    100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Bottom gradient */
+.cs-inner::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 25%;
+  background: linear-gradient(to top, var(--dark) 0%, transparent 100%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ── Top label bar ────────────────────────────────────────────────────────── */
+.cs-label-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  padding: 7rem 6vw 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(9, 42, 0, 0.7) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.cs-section-tag {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.cs-section-tag::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.cs-dot-nav {
+  display: flex;
+  gap: 0.55rem;
+  pointer-events: all;
+}
+
+.cs-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0;
+  transition: background 0.5s ease, transform 0.5s var(--ease-out), width 0.5s ease;
+}
+
+.cs-dot.active {
+  background: var(--gold);
+  width: 18px;
+  border-radius: 3px;
+}
+
+.cs-counter {
+  font-size: 0.68rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.3);
+  font-variant-numeric: tabular-nums;
+}
+
+.cs-current {
+  color: rgba(255, 255, 255, 0.65);
+  transition: all 0.4s ease;
+}
+
+/* ── Content panels (right 45%) ───────────────────────────────────────────── */
+.cs-panels {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 46%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.cs-panel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  padding: 0 6vw 0 2.5vw;
+  will-change: opacity, transform;
+}
+
+/* ── Big ghost number ─────────────────────────────────────────────────────── */
+.cs-num {
+  font-family: var(--font-serif);
+  font-size: clamp(5rem, 8vw, 8rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.035);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  margin-bottom: -1.5rem;
+  will-change: opacity, transform;
+}
+
+/* ── Title ────────────────────────────────────────────────────────────────── */
+.cs-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.2vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: 1.6rem;
+}
+
+.cs-title-line {
+  display: block;
+  will-change: opacity, transform;
+}
+
+.cs-title-accent {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+/* ── Client info ──────────────────────────────────────────────────────────── */
+.cs-client-block {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  will-change: opacity, transform;
+}
+
+.cs-client-name {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.03em;
+  margin-bottom: 0.2rem;
+}
+
+.cs-client-type {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Stats row ────────────────────────────────────────────────────────────── */
+.cs-stats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.cs-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  will-change: opacity, transform;
+}
+
+.cs-stat strong {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.cs-stat span {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  line-height: 1.5;
+}
+
+/* ── Story lines ──────────────────────────────────────────────────────────── */
+.cs-story {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cs-line {
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.5);
+  will-change: opacity, transform;
+}
+
+.cs-line strong {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────────────── */
+.cs-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 30;
+}
+
+.cs-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(to right, var(--green-accent), var(--gold));
+  will-change: width;
+  transform-origin: left;
+}
+
+/* ── Scroll nudge (fades out after case 1 is established) ─────────────────── */
+.cs-scroll-nudge {
+  position: absolute;
+  bottom: 2.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 20;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.cs-scroll-nudge span {
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.cs-nudge-line {
+  width: 1px;
+  height: 36px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  animation: nudgePulse 2s ease-in-out infinite;
+}
+
+@keyframes nudgePulse {
+  0%, 100% { transform: scaleY(0.3) translateY(-10px); opacity: 0; }
+  50%       { transform: scaleY(1)   translateY(0px);  opacity: 1; }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  #case-studies { height: 600vh; }
+
+  .cs-images { width: 100%; }
+
+  .cs-img-gradient {
+    background: linear-gradient(
+      to top,
+      rgba(9, 42, 0, 0.98) 0%,
+      rgba(9, 42, 0, 0.6)  45%,
+      rgba(9, 42, 0, 0.25) 100%
+    );
+  }
+
+  .cs-panels {
+    width: 100%;
+    bottom: 0;
+    top: auto;
+    height: auto;
+  }
+
+  .cs-panel {
+    position: absolute;
+    bottom: 4rem;
+    top: auto;
+    transform: none;
+    padding: 0 5vw;
+  }
+
+  .cs-num { display: none; }
+  .cs-title { font-size: clamp(1.9rem, 6vw, 2.6rem); }
+}
+
+@media (max-width: 600px) {
+  .cs-stats { gap: 1.5rem; }
+  .cs-stat strong { font-size: 1.6rem; }
+  .cs-title { font-size: clamp(1.7rem, 7vw, 2.3rem); }
+  .cs-line { font-size: 0.82rem; }
+}
