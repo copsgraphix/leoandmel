@@ -68,104 +68,109 @@
          1. TRANSFORMATION STORY  (450vh pinned)
          Scroll through: Before state → Assessment → Sweep reveal → After
     ═══════════════════════════════════════════════════════════════════ -->
-    <section id="transformation-story" class="pin-section" aria-label="Property transformation story">
+    <section id="transformation-story" class="pin-section" aria-label="Property transformation engine">
       <div class="pin-inner">
 
-        <!-- Images -->
-        <div class="ts-before" aria-hidden="true"></div>
-        <div class="ts-after"  aria-hidden="true"></div>
+        <!-- Base: neglected property -->
+        <div class="te-before" aria-hidden="true"></div>
+        <!-- Final: maintained property — clips in as restoration completes -->
+        <div class="te-after"  aria-hidden="true"></div>
 
-        <!-- Vignette depth -->
-        <div class="ts-vignette" aria-hidden="true"></div>
+        <!-- Zone restoration overlays (SVG) — each group activates at its scroll phase -->
+        <svg class="te-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
 
-        <!-- The sweep reveal line -->
-        <div class="ts-sweep" aria-hidden="true"></div>
+          <!-- TURF — large ground areas (left side, right side, bottom) -->
+          <g class="te-zone-group" id="te-turf">
+            <polygon points="0,300 175,300 175,600 0,600"/>
+            <polygon points="825,300 1000,300 1000,600 825,600"/>
+            <rect x="175" y="475" width="650" height="125"/>
+          </g>
 
-        <!-- Assessment grid (Stage 2) -->
-        <div class="ts-grid" aria-hidden="true"></div>
+          <!-- DRAINAGE — perimeter path with basin nodes -->
+          <g class="te-zone-group" id="te-drainage">
+            <path class="te-drain-flow" d="M 0,588 Q 250,562 500,572 T 1000,588"/>
+            <circle class="te-drain-node" cx="245" cy="568"/>
+            <circle class="te-drain-node" cx="500" cy="572"/>
+            <circle class="te-drain-node" cx="755" cy="568"/>
+          </g>
 
-        <!-- Zone assessment labels (Stage 2) -->
-        <div class="ts-zones" aria-hidden="true">
-          <div class="ts-zone-pin" style="top:28%;left:18%">
-            <div class="ts-zone-pin-dot"></div>
-            <div class="ts-zone-pin-line"></div>
-            <div class="ts-zone-pin-text">Zone A — Turf</div>
-          </div>
-          <div class="ts-zone-pin" style="top:44%;left:58%">
-            <div class="ts-zone-pin-dot"></div>
-            <div class="ts-zone-pin-line"></div>
-            <div class="ts-zone-pin-text">Zone B — Drainage</div>
-          </div>
-          <div class="ts-zone-pin" style="top:18%;left:72%">
-            <div class="ts-zone-pin-dot"></div>
-            <div class="ts-zone-pin-line"></div>
-            <div class="ts-zone-pin-text">Zone C — Canopy</div>
-          </div>
-          <div class="ts-zone-pin" style="top:62%;left:32%">
-            <div class="ts-zone-pin-dot"></div>
-            <div class="ts-zone-pin-line"></div>
-            <div class="ts-zone-pin-text">Zone D — Hardscape</div>
-          </div>
-          <div class="ts-zone-pin" style="top:72%;left:80%">
-            <div class="ts-zone-pin-dot"></div>
-            <div class="ts-zone-pin-line"></div>
-            <div class="ts-zone-pin-text">Zone E — Beds</div>
-          </div>
-        </div>
+          <!-- BEDS — strips along building facade + flanking entry -->
+          <g class="te-zone-group" id="te-beds">
+            <rect x="285" y="290" width="170" height="20" rx="2"/>
+            <rect x="545" y="290" width="170" height="20" rx="2"/>
+            <ellipse cx="450" cy="448" rx="52" ry="17"/>
+            <ellipse cx="550" cy="448" rx="52" ry="17"/>
+          </g>
 
-        <!-- Top section label -->
+          <!-- TREES — canopy circles in corners and along edges -->
+          <g class="te-zone-group" id="te-trees">
+            <circle cx="108" cy="375" r="68"/>
+            <circle cx="22"  cy="492" r="44"/>
+            <circle cx="892" cy="375" r="68"/>
+            <circle cx="978" cy="492" r="44"/>
+            <circle cx="238" cy="545" r="48"/>
+            <circle cx="500" cy="558" r="38"/>
+            <circle cx="762" cy="545" r="48"/>
+          </g>
+
+          <!-- HARDSCAPE — central walkway and entry plaza -->
+          <g class="te-zone-group" id="te-hardscape">
+            <rect x="458" y="295" width="84" height="182" rx="3"/>
+            <rect x="388" y="458" width="224" height="46"  rx="3"/>
+            <rect x="460" y="504" width="80"  height="96"  rx="3"/>
+          </g>
+
+        </svg>
+
+        <!-- Depth vignette -->
+        <div class="te-vignette" aria-hidden="true"></div>
+
+        <!-- Section tag -->
         <div class="ps-tag" aria-hidden="true">
-          <span class="ps-tag-label">Property Transformation</span>
-          <span class="ps-tag-right">Scroll to progress</span>
+          <span class="ps-tag-label">Property Transformation Engine</span>
+          <span class="ps-tag-right">Scroll to restore</span>
         </div>
 
-        <!-- Narrative stages — stacked, GSAP cross-fades between them -->
-        <div class="ts-text">
+        <!-- Right-side checklist tracker -->
+        <div class="te-tracker" aria-label="Restoration progress">
+          <div class="te-tk-label">Restoring</div>
+          <div class="te-tracker-item" data-system="turf">
+            <div class="te-tk-dot"></div>
+            <span>Turf &amp; Lawn</span>
+          </div>
+          <div class="te-tracker-item" data-system="drainage">
+            <div class="te-tk-dot"></div>
+            <span>Drainage</span>
+          </div>
+          <div class="te-tracker-item" data-system="beds">
+            <div class="te-tk-dot"></div>
+            <span>Landscape Beds</span>
+          </div>
+          <div class="te-tracker-item" data-system="trees">
+            <div class="te-tk-dot"></div>
+            <span>Trees &amp; Canopy</span>
+          </div>
+          <div class="te-tracker-item" data-system="hardscape">
+            <div class="te-tk-dot"></div>
+            <span>Hardscape</span>
+          </div>
+        </div>
 
-          <div class="ts-stage ts-s1">
-            <p class="ts-act">01 — Before</p>
-            <h2>We see what others overlook.</h2>
-            <p>Before a plan. Before a contract. We walk every inch of your property and document what years of deferred maintenance have compounded.</p>
-          </div>
+        <!-- Bottom-left: active system label -->
+        <div class="te-active-display" aria-live="polite">
+          <div class="te-ad-tag">Now restoring</div>
+          <div class="te-ad-system">Turf &amp; Lawn</div>
+          <div class="te-ad-bar"><div class="te-ad-fill"></div></div>
+        </div>
 
-          <div class="ts-stage ts-s2">
-            <p class="ts-act">02 — Assessment</p>
-            <h2>Mapped. Graded. Prioritized.</h2>
-            <p>Every zone catalogued — turf condition, drainage slope, soil health, structural obstructions. A phased remediation plan built before a single blade is cut.</p>
-          </div>
-
-          <div class="ts-stage ts-s3">
-            <p class="ts-act">03 — Transformation</p>
-            <h2>Systematic. Not cosmetic.</h2>
-            <p>Zone by zone. Each treatment informed by the assessment, each improvement setting the foundation for the next. This is how permanent change is made.</p>
-          </div>
-
-          <div class="ts-stage ts-s4">
-            <p class="ts-act">04 — The Standard</p>
-            <h2>Achieved in one season.<br>Maintained in every one after.</h2>
-            <p>Not a one-time transformation. A maintained asset — every week, every season, every year.</p>
-          </div>
-
-        </div><!-- /ts-text -->
-
-        <!-- Result stats (appear at Stage 4) -->
-        <div class="ts-results" aria-hidden="true">
-          <div class="ts-result-item">
-            <div class="ts-result-value">15+</div>
-            <div class="ts-result-label">Years of Service</div>
-          </div>
-          <div class="ts-result-item">
-            <div class="ts-result-value">200+</div>
-            <div class="ts-result-label">Properties Managed</div>
-          </div>
-          <div class="ts-result-item">
-            <div class="ts-result-value">52</div>
-            <div class="ts-result-label">Weeks / Year Active</div>
-          </div>
+        <!-- Grand-reveal completion message -->
+        <div class="te-complete-msg" aria-hidden="true">
+          <h2>Transformation complete.</h2>
+          <p>Achieved in one season.<br>Maintained in every one that follows.</p>
         </div>
 
         <!-- Progress bar -->
-        <div class="ps-progress"><div class="ts-progress-fill ps-progress-fill"></div></div>
+        <div class="ps-progress"><div class="te-progress-fill ps-progress-fill"></div></div>
 
       </div><!-- /pin-inner -->
     </section>
@@ -175,224 +180,88 @@
          2. PROPERTY MAP  (400vh pinned)
          SVG schematic — 5 zones activate sequentially with scroll
     ═══════════════════════════════════════════════════════════════════ -->
-    <section id="property-map" class="pin-section" aria-label="Interactive property service map">
-      <div class="pin-inner">
+    <section id="property-map" aria-label="Interactive aerial property map">
+      <div class="pm-inner">
 
-        <!-- Top label -->
+        <!-- Aerial photo base — the property IS the interface -->
+        <div class="pm-photo" aria-hidden="true"></div>
+        <div class="pm-photo-overlay" aria-hidden="true"></div>
+
+        <!-- Interactive SVG zones — hover each to activate -->
+        <svg class="pm-svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"
+             role="img" aria-label="Aerial commercial property map with interactive service zones">
+
+          <!-- TURF & LAWN — surrounding ground areas -->
+          <g class="pm-zone" data-zone="turf" tabindex="0" role="button" aria-label="Turf and lawn zone">
+            <polygon points="0,360 340,360 340,1080 0,1080" class="pm-z-shape"/>
+            <polygon points="1580,360 1920,360 1920,1080 1580,1080" class="pm-z-shape"/>
+            <rect x="340" y="740" width="1240" height="340" class="pm-z-shape"/>
+          </g>
+
+          <!-- TREES & CANOPY — circles in corners and along front edge -->
+          <g class="pm-zone" data-zone="trees" tabindex="0" role="button" aria-label="Trees and canopy zone">
+            <circle cx="195"  cy="490" r="115" class="pm-z-shape"/>
+            <circle cx="55"   cy="725" r="82"  class="pm-z-shape"/>
+            <circle cx="1725" cy="490" r="115" class="pm-z-shape"/>
+            <circle cx="1865" cy="725" r="82"  class="pm-z-shape"/>
+            <circle cx="455"  cy="945" r="78"  class="pm-z-shape"/>
+            <circle cx="960"  cy="958" r="66"  class="pm-z-shape"/>
+            <circle cx="1465" cy="945" r="78"  class="pm-z-shape"/>
+          </g>
+
+          <!-- HARDSCAPE & ACCESS — central walkways and entry -->
+          <g class="pm-zone" data-zone="hardscape" tabindex="0" role="button" aria-label="Hardscape and access zone">
+            <rect x="862" y="488" width="196" height="272" class="pm-z-shape"/>
+            <rect x="748" y="742" width="424" height="78"  class="pm-z-shape"/>
+            <rect x="900" y="820" width="120" height="260" class="pm-z-shape"/>
+          </g>
+
+          <!-- LANDSCAPE BEDS — strips along building facades -->
+          <g class="pm-zone" data-zone="beds" tabindex="0" role="button" aria-label="Landscape beds zone">
+            <rect x="524"  y="460" width="338" height="36" rx="5" class="pm-z-shape"/>
+            <rect x="1058" y="460" width="338" height="36" rx="5" class="pm-z-shape"/>
+            <ellipse cx="862"  cy="735" rx="82" ry="24" class="pm-z-shape"/>
+            <ellipse cx="1058" cy="735" rx="82" ry="24" class="pm-z-shape"/>
+          </g>
+
+          <!-- DRAINAGE — perimeter channel and basin nodes -->
+          <g class="pm-zone" data-zone="drainage" tabindex="0" role="button" aria-label="Drainage zone">
+            <path d="M 0,1042 Q 320,1002 640,1022 T 1280,1012 T 1920,1042"
+                  stroke-width="42" class="pm-z-stroke"/>
+            <circle cx="480"  cy="1018" r="33" class="pm-z-shape"/>
+            <circle cx="960"  cy="1010" r="33" class="pm-z-shape"/>
+            <circle cx="1440" cy="1018" r="33" class="pm-z-shape"/>
+          </g>
+
+          <!-- Buildings (non-interactive) -->
+          <rect x="524"  y="92"  width="352" height="368" rx="5" class="pm-building"/>
+          <rect x="1044" y="92"  width="352" height="368" rx="5" class="pm-building"/>
+
+        </svg>
+
+        <!-- Section label -->
         <div class="ps-tag" aria-hidden="true">
           <span class="ps-tag-label">Property Systems</span>
-          <span class="ps-tag-right">Scroll through each zone</span>
+          <span class="ps-tag-right">Hover each zone</span>
         </div>
 
-        <!-- Left: SVG map -->
-        <div class="pm-map-panel">
-          <div class="pm-svg-wrap">
-            <svg class="pm-svg" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Default hint -->
+        <div class="pm-hint">
+          <div class="pm-hint-dot"></div>
+          <span>Hover to explore each service zone</span>
+        </div>
 
-              <!-- ── ZONE 1: TURF ──────────────────────────────────── -->
-              <polygon class="pm-zone" data-zone="turf"
-                points="0,0 50,0 50,390 240,390 240,170 50,170 50,45 240,45 240,0"/>
-              <!-- between left wing and main building -->
-              <rect class="pm-zone" data-zone="turf" x="240" y="0" width="90" height="45"/>
-              <rect class="pm-zone" data-zone="turf" x="240" y="170" width="90" height="220"/>
-              <!-- right side mirror -->
-              <polygon class="pm-zone" data-zone="turf"
-                points="950,0 1000,0 1000,390 760,390 760,170 950,170 950,45 760,45 760,0"/>
-              <rect class="pm-zone" data-zone="turf" x="670" y="0" width="90" height="45"/>
-              <rect class="pm-zone" data-zone="turf" x="670" y="170" width="90" height="220"/>
-              <!-- south lawn -->
-              <rect class="pm-zone" data-zone="turf" x="0" y="390" width="1000" height="115"/>
-
-              <!-- ── ZONE 2: TREES ─────────────────────────────────── -->
-              <circle class="pm-zone" data-zone="trees" cx="85"  cy="80"  r="32"/>
-              <circle class="pm-zone" data-zone="trees" cx="30"  cy="260" r="22"/>
-              <circle class="pm-zone" data-zone="trees" cx="915" cy="80"  r="32"/>
-              <circle class="pm-zone" data-zone="trees" cx="970" cy="260" r="22"/>
-              <circle class="pm-zone" data-zone="trees" cx="185" cy="455" r="26"/>
-              <circle class="pm-zone" data-zone="trees" cx="380" cy="460" r="20"/>
-              <circle class="pm-zone" data-zone="trees" cx="500" cy="468" r="16"/>
-              <circle class="pm-zone" data-zone="trees" cx="620" cy="460" r="20"/>
-              <circle class="pm-zone" data-zone="trees" cx="815" cy="455" r="26"/>
-
-              <!-- ── ZONE 3: HARDSCAPE ─────────────────────────────── -->
-              <!-- main entrance walkway (vertical) -->
-              <rect class="pm-zone" data-zone="hardscape" x="455" y="195" width="90" height="195"/>
-              <!-- entry plaza -->
-              <rect class="pm-zone" data-zone="hardscape" x="375" y="385" width="250" height="52"/>
-              <!-- connecting path left wing to main building -->
-              <rect class="pm-zone" data-zone="hardscape" x="240" y="158" width="90" height="22"/>
-              <!-- connecting path right wing to main building -->
-              <rect class="pm-zone" data-zone="hardscape" x="670" y="158" width="90" height="22"/>
-              <!-- road approach outbound -->
-              <rect class="pm-zone" data-zone="hardscape" x="455" y="437" width="90" height="130"/>
-
-              <!-- ── ZONE 4: LANDSCAPE BEDS ────────────────────────── -->
-              <!-- along south face of main building -->
-              <rect class="pm-zone" data-zone="beds" x="330" y="192" width="340" height="16"/>
-              <!-- along south face of left wing -->
-              <rect class="pm-zone" data-zone="beds" x="50"  y="168" width="190" height="13"/>
-              <!-- along south face of right wing -->
-              <rect class="pm-zone" data-zone="beds" x="760" y="168" width="190" height="13"/>
-              <!-- flanking entry plaza -->
-              <ellipse class="pm-zone" data-zone="beds" cx="428" cy="362" rx="38" ry="14"/>
-              <ellipse class="pm-zone" data-zone="beds" cx="572" cy="362" rx="38" ry="14"/>
-
-              <!-- ── ZONE 5: DRAINAGE ──────────────────────────────── -->
-              <path class="pm-zone pm-drain-path" data-zone="drainage" stroke-width="14"
-                d="M 0,508 C 120,488 260,525 420,510 S 620,490 760,510 S 900,525 1000,505"/>
-              <circle class="pm-zone" data-zone="drainage" cx="240" cy="506" r="13"/>
-              <circle class="pm-zone" data-zone="drainage" cx="500" cy="500" r="10"/>
-              <circle class="pm-zone" data-zone="drainage" cx="760" cy="506" r="13"/>
-
-              <!-- ── BUILDINGS (non-zone, visual anchors) ──────────── -->
-              <rect class="pm-building" x="330" y="30"  width="340" height="162" rx="3"/>
-              <rect class="pm-building" x="50"  y="45"  width="190" height="123" rx="3"/>
-              <rect class="pm-building" x="760" y="45"  width="190" height="123" rx="3"/>
-
-              <!-- Window detail: main building -->
-              <rect class="pm-window" x="370" y="65"  width="22" height="32"/>
-              <rect class="pm-window" x="410" y="65"  width="22" height="32"/>
-              <rect class="pm-window" x="450" y="65"  width="22" height="32"/>
-              <rect class="pm-window" x="490" y="65"  width="22" height="32"/>
-              <rect class="pm-window" x="530" y="65"  width="22" height="32"/>
-              <rect class="pm-window" x="570" y="65"  width="22" height="32"/>
-              <rect class="pm-window" x="610" y="65"  width="22" height="32"/>
-              <rect class="pm-window" x="370" y="115" width="22" height="32"/>
-              <rect class="pm-window" x="410" y="115" width="22" height="32"/>
-              <rect class="pm-window" x="490" y="115" width="22" height="32"/>
-              <rect class="pm-window" x="570" y="115" width="22" height="32"/>
-              <rect class="pm-window" x="610" y="115" width="22" height="32"/>
-              <!-- Window detail: left wing -->
-              <rect class="pm-window" x="80"  y="80"  width="18" height="28"/>
-              <rect class="pm-window" x="112" y="80"  width="18" height="28"/>
-              <rect class="pm-window" x="144" y="80"  width="18" height="28"/>
-              <rect class="pm-window" x="176" y="80"  width="18" height="28"/>
-              <!-- Window detail: right wing -->
-              <rect class="pm-window" x="790" y="80"  width="18" height="28"/>
-              <rect class="pm-window" x="822" y="80"  width="18" height="28"/>
-              <rect class="pm-window" x="854" y="80"  width="18" height="28"/>
-              <rect class="pm-window" x="886" y="80"  width="18" height="28"/>
-
-              <!-- ── COMPASS ─────────────────────────────────────── -->
-              <g class="pm-compass" transform="translate(960,46)">
-                <circle r="20" stroke-width="1"/>
-                <text x="0" y="-7" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" font-weight="700">N</text>
-                <line x1="0" y1="-13" x2="0" y2="13" stroke-width="1"/>
-                <line x1="-13" y1="0" x2="13" y2="0" stroke-width="1"/>
-                <polygon points="0,-13 -3,-4 0,-7 3,-4" fill="rgba(196,162,69,0.7)"/>
-              </g>
-
-              <!-- ── SCALE BAR ───────────────────────────────────── -->
-              <g class="pm-scale" transform="translate(28,535)">
-                <line x1="0" y1="0" x2="80" y2="0" stroke-width="1"/>
-                <line x1="0" y1="-5" x2="0" y2="5" stroke-width="1"/>
-                <line x1="80" y1="-5" x2="80" y2="5" stroke-width="1"/>
-                <text x="40" y="-9" text-anchor="middle" font-size="9" font-family="Inter,sans-serif">50 m</text>
-              </g>
-
-            </svg>
+        <!-- Info panel — slides up when a zone is hovered -->
+        <div class="pm-info-panel" aria-live="polite">
+          <div class="pm-ip-swatch"></div>
+          <div class="pm-ip-content">
+            <div class="pm-ip-name"></div>
+            <div class="pm-ip-desc"></div>
           </div>
-        </div><!-- /pm-map-panel -->
+          <div class="pm-ip-services"></div>
+        </div>
 
-        <!-- Right: Zone description panels -->
-        <div class="pm-desc-panel">
-
-          <div class="pm-desc pm-desc-turf">
-            <div class="pm-desc-zone-color" style="background:#5a8a38;"></div>
-            <h3>Turf &amp; Lawn Management</h3>
-            <p>The foundation of every commercial property's first impression. We manage turf systems at the precision and scale they require — not a residential approach applied at commercial volume.</p>
-            <ul class="pm-svc-list">
-              <li>Commercial mowing &amp; edging programs</li>
-              <li>Fertilization &amp; pre-emergent programs</li>
-              <li>Aeration, overseeding &amp; renovation</li>
-              <li>Drought stress &amp; weed management</li>
-            </ul>
-            <div class="pm-desc-coverage">
-              Typical site coverage<strong>~45% of total property</strong>
-            </div>
-          </div>
-
-          <div class="pm-desc pm-desc-trees">
-            <div class="pm-desc-zone-color" style="background:#2d5a28;"></div>
-            <h3>Trees &amp; Canopy</h3>
-            <p>Mature trees are assets. Unmaintained trees are liabilities. We manage canopy health, structure, and safety across every property we serve — before they become a code or insurance issue.</p>
-            <ul class="pm-svc-list">
-              <li>Structural pruning &amp; clearance trimming</li>
-              <li>Canopy health &amp; fertilization programs</li>
-              <li>Storm damage assessment &amp; response</li>
-              <li>Young tree training &amp; staking</li>
-            </ul>
-            <div class="pm-desc-coverage">
-              Typical site coverage<strong>~12% of total property</strong>
-            </div>
-          </div>
-
-          <div class="pm-desc pm-desc-hardscape">
-            <div class="pm-desc-zone-color" style="background:#c4a245;"></div>
-            <h3>Hardscape &amp; Access</h3>
-            <p>Walkways, entries, and paved surfaces are how clients and visitors physically experience your property. We keep them clean, edged, safe, and well-defined year-round.</p>
-            <ul class="pm-svc-list">
-              <li>Pressure washing &amp; surface cleaning</li>
-              <li>Edging, curb detailing &amp; stripe lines</li>
-              <li>Seasonal salt &amp; debris removal</li>
-              <li>Surface inspection &amp; crack monitoring</li>
-            </ul>
-            <div class="pm-desc-coverage">
-              Typical site coverage<strong>~18% of total property</strong>
-            </div>
-          </div>
-
-          <div class="pm-desc pm-desc-beds">
-            <div class="pm-desc-zone-color" style="background:#c4a245;"></div>
-            <h3>Landscape Beds</h3>
-            <p>Beds define the transition between built and natural environments. A well-maintained bed communicates institutional care throughout an entire campus — they are never an afterthought.</p>
-            <ul class="pm-svc-list">
-              <li>Seasonal color planting programs</li>
-              <li>Mulch installation &amp; refresh (annual)</li>
-              <li>Weed control &amp; bed edging</li>
-              <li>Perennial, annual &amp; shrub management</li>
-            </ul>
-            <div class="pm-desc-coverage">
-              Typical site coverage<strong>~8% of total property</strong>
-            </div>
-          </div>
-
-          <div class="pm-desc pm-desc-drainage">
-            <div class="pm-desc-zone-color" style="background:#5a8aaa;"></div>
-            <h3>Drainage &amp; Infrastructure</h3>
-            <p>Drainage failures compound every other landscape problem. We address stormwater infrastructure as a primary system — not a remediation project after flooding has already damaged the property.</p>
-            <ul class="pm-svc-list">
-              <li>Storm drain &amp; catch basin maintenance</li>
-              <li>Grade correction &amp; slope remediation</li>
-              <li>French drain &amp; channel installation</li>
-              <li>Post-storm damage response team</li>
-            </ul>
-            <div class="pm-desc-coverage">
-              Typical site coverage<strong>Perimeter &amp; infrastructure</strong>
-            </div>
-          </div>
-
-          <div class="pm-desc pm-desc-system">
-            <div class="pm-desc-zone-color" style="background:linear-gradient(to right,#5a8a38,#c4a245);"></div>
-            <h3>The Full Program.</h3>
-            <p>Every zone. Every season. A single maintenance partner who understands your entire property as an integrated system — not a collection of separate contracts.</p>
-            <ul class="pm-svc-list">
-              <li>Unified property maintenance contract</li>
-              <li>Dedicated account manager per property</li>
-              <li>Monthly service reports &amp; documentation</li>
-              <li>24-hour storm response coverage</li>
-            </ul>
-            <div class="pm-desc-coverage">
-              Total program coverage<strong>100% of property — 52 weeks</strong>
-            </div>
-          </div>
-
-        </div><!-- /pm-desc-panel -->
-
-        <!-- Progress bar -->
-        <div class="ps-progress"><div class="pm-progress-fill ps-progress-fill"></div></div>
-
-      </div><!-- /pin-inner -->
+      </div><!-- /pm-inner -->
     </section>
 
 
@@ -400,19 +269,19 @@
          3. SEASONAL EVOLUTION  (400vh pinned)
          One scene — four seasons — driven entirely by scroll
     ═══════════════════════════════════════════════════════════════════ -->
-    <section id="seasonal-evolution" class="pin-section" aria-label="Seasonal service coverage">
+    <section id="seasonal-evolution" class="pin-section" aria-label="Year-round seasonal coverage">
       <div class="pin-inner">
 
-        <!-- Season image layers — stacked, GSAP controls opacity/filter -->
+        <!-- Four season images — stacked, GSAP scrub morphs between them -->
         <div class="se-img se-spring" aria-hidden="true"></div>
         <div class="se-img se-summer" aria-hidden="true"></div>
         <div class="se-img se-fall"   aria-hidden="true"></div>
         <div class="se-img se-winter" aria-hidden="true"></div>
 
-        <!-- Gradient overlay -->
+        <!-- Gradient vignette -->
         <div class="se-gradient" aria-hidden="true"></div>
 
-        <!-- Season name typography (background) -->
+        <!-- Season name — the only text, full typographic weight -->
         <div class="se-names" aria-hidden="true">
           <div class="se-name se-name-spring">Spring</div>
           <div class="se-name se-name-summer">Summer</div>
@@ -420,7 +289,7 @@
           <div class="se-name se-name-winter">Winter</div>
         </div>
 
-        <!-- Top label -->
+        <!-- Section tag -->
         <div class="ps-tag" aria-hidden="true">
           <span class="ps-tag-label">Year-Round Coverage</span>
           <span class="ps-tag-right">52 weeks / year</span>
@@ -433,80 +302,6 @@
           <div class="se-ind-pip se-ind-pip-fall"></div>
           <div class="se-ind-pip se-ind-pip-winter"></div>
         </div>
-
-        <!-- Season content panels -->
-        <div class="se-content">
-
-          <!-- Spring -->
-          <div class="se-season-block se-spring-block">
-            <p class="se-season-eyebrow">Spring</p>
-            <h3>Awakening &amp;<br>Renewal</h3>
-            <p>The season of rehabilitation. We clear, treat, and prepare every surface for the growing year ahead.</p>
-          </div>
-
-          <!-- Summer -->
-          <div class="se-season-block se-summer-block">
-            <p class="se-season-eyebrow">Summer</p>
-            <h3>Growth &amp;<br>Precision</h3>
-            <p>At peak growth, consistency is everything. Weekly programs maintain the standard through the most demanding season.</p>
-          </div>
-
-          <!-- Fall -->
-          <div class="se-season-block se-fall-block">
-            <p class="se-season-eyebrow">Fall</p>
-            <h3>Preparation &amp;<br>Protection</h3>
-            <p>Not just leaf removal. A structured seasonal program that protects the property through winter and sets the stage for spring.</p>
-          </div>
-
-          <!-- Winter -->
-          <div class="se-season-block se-winter-block">
-            <p class="se-season-eyebrow">Winter</p>
-            <h3>Safety &amp;<br>Response</h3>
-            <p>When others shut down, we activate. Ice management, snow removal, and storm response — from first flake to last thaw.</p>
-          </div>
-
-          <!-- Service lists (right side) -->
-          <div class="se-svc-panel se-spring-svc">
-            <ul>
-              <li>Site cleanup &amp; debris removal</li>
-              <li>Pre-emergent weed treatment</li>
-              <li>Aeration &amp; overseeding</li>
-              <li>Mulch installation</li>
-              <li>Irrigation start-up &amp; check</li>
-            </ul>
-          </div>
-
-          <div class="se-svc-panel se-summer-svc">
-            <ul>
-              <li>Weekly precision mowing</li>
-              <li>Irrigation management</li>
-              <li>Heat &amp; drought stress treatment</li>
-              <li>Pest &amp; weed control</li>
-              <li>Monthly bed maintenance</li>
-            </ul>
-          </div>
-
-          <div class="se-svc-panel se-fall-svc">
-            <ul>
-              <li>Leaf removal programs</li>
-              <li>Fall fertilization &amp; overseeding</li>
-              <li>Tree &amp; shrub pruning</li>
-              <li>Winterization prep</li>
-              <li>Final mow &amp; cleanup</li>
-            </ul>
-          </div>
-
-          <div class="se-svc-panel se-winter-svc">
-            <ul>
-              <li>Snow &amp; ice management</li>
-              <li>Salt &amp; de-icing programs</li>
-              <li>Walkway &amp; entry clearance</li>
-              <li>24hr storm response</li>
-              <li>Property condition monitoring</li>
-            </ul>
-          </div>
-
-        </div><!-- /se-content -->
 
         <!-- Progress bar -->
         <div class="ps-progress"><div class="se-progress-fill ps-progress-fill"></div></div>

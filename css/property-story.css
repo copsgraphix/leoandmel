@@ -1,15 +1,12 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   PROPERTY STORY — Pinned Scroll Narrative System
-   Three sequential pinned experiences:
-     1. #transformation-story  (450vh)
-     2. #property-map          (400vh)
-     3. #seasonal-evolution    (400vh)
-   Each section uses position:sticky internally — GSAP scrub drives every state.
+   PROPERTY STORY — Three Cinematic Experiences
+     1. #transformation-story  600vh  Scroll-driven zone restoration engine
+     2. #property-map           100vh  Hover-interactive aerial map
+     3. #seasonal-evolution     400vh  Continuous seasonal morph
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ─── Shared: Pin Container ───────────────────────────────────────────────── */
+/* ─── Shared: Sticky pin container ─────────────────────────────────────── */
 .pin-section { position: relative; }
-
 .pin-inner {
   position: sticky;
   top: 0;
@@ -19,476 +16,439 @@
   will-change: transform;
 }
 
-/* ─── Shared: Section tag (top-left label) ────────────────────────────────── */
+/* ─── Shared: Section tag ───────────────────────────────────────────────── */
 .ps-tag {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 7rem 6vw 0;
+  top: 0; left: 0; right: 0;
+  padding: 6.5rem 6vw 0;
   z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(to bottom, rgba(9,42,0,0.6) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(9,42,0,0.65) 0%, transparent 100%);
   pointer-events: none;
 }
-
 .ps-tag-label {
   font-size: 0.6rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--gold);
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
+  display: flex; align-items: center; gap: 0.65rem;
 }
 .ps-tag-label::before {
   content: '';
-  display: block;
-  width: 22px;
-  height: 1px;
+  display: block; width: 22px; height: 1px;
   background: var(--gold);
 }
-
 .ps-tag-right {
   font-size: 0.62rem;
   letter-spacing: 0.2em;
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.22);
 }
 
-/* ─── Shared: Bottom progress line ───────────────────────────────────────── */
+/* ─── Shared: Bottom progress line ─────────────────────────────────────── */
 .ps-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: absolute; bottom: 0; left: 0; right: 0;
   height: 1px;
   background: rgba(255,255,255,0.05);
   z-index: 30;
 }
 .ps-progress-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: absolute; left: 0; top: 0;
   height: 100%;
   background: linear-gradient(to right, var(--green-deep), var(--gold));
+  width: 0%;
   will-change: width;
 }
 
+
 /* ══════════════════════════════════════════════════════════════════════════
-   1. TRANSFORMATION STORY
+   1. TRANSFORMATION ENGINE
+   The showpiece. User scrolls through 600vh while watching the property
+   get restored zone-by-zone. Five SVG zone overlays activate sequentially.
+   The section ends with a full reveal of the maintained property.
    ══════════════════════════════════════════════════════════════════════════ */
 
-#transformation-story { height: 450vh; }
+#transformation-story { height: 600vh; }
 
-/* ── Full-screen image layers ─────────────────────────────────────────────── */
-.ts-before,
-.ts-after {
+/* ── Photo layers ─────────────────────────────────────────────────────── */
+.te-before,
+.te-after {
   position: absolute;
-  inset: 0;
+  inset: -4%;
   background-size: cover;
   background-position: center;
-  will-change: clip-path, filter, opacity;
+  will-change: opacity, filter;
 }
-
-.ts-before { background-image: url('../unkept house.jpeg'); }
-
-.ts-after  {
+.te-before { background-image: url('../unkept house.jpeg'); z-index: 1; }
+.te-after  {
   background-image: url('../perfectly maintained.jpeg');
-  /* starts fully hidden — GSAP reveals from bottom to top */
+  z-index: 3;
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path, opacity;
 }
 
-/* Vignette on both */
-.ts-vignette {
+/* ── Zone SVG overlay ─────────────────────────────────────────────────── */
+.te-svg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(9,42,0,0.7) 100%);
+  width: 100%; height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* All zone groups start invisible */
+.te-zone-group { will-change: opacity; }
+
+/* Turf — living green wash */
+#te-turf    { fill: rgba(72, 185, 48, 0.38); filter: drop-shadow(0 0 18px rgba(72,185,48,0.3)); }
+
+/* Drainage — flowing blue */
+#te-drainage .te-drain-flow {
+  fill: none;
+  stroke: rgba(55, 135, 210, 0.75);
+  stroke-linecap: round;
+}
+#te-drainage .te-drain-node {
+  r: 9;
+  fill: rgba(55, 135, 210, 0.55);
+  filter: drop-shadow(0 0 10px rgba(55,135,210,0.6));
+}
+
+/* Beds — warm earth gold */
+#te-beds { fill: rgba(196, 155, 70, 0.52); filter: drop-shadow(0 0 14px rgba(196,155,70,0.3)); }
+
+/* Trees — deep canopy green */
+#te-trees { fill: rgba(18, 95, 18, 0.62); filter: drop-shadow(0 0 20px rgba(20,110,20,0.4)); }
+
+/* Hardscape — clean warm light */
+#te-hardscape { fill: rgba(215, 198, 152, 0.42); filter: drop-shadow(0 0 14px rgba(215,198,152,0.25)); }
+
+/* ── Vignette ─────────────────────────────────────────────────────────── */
+.te-vignette {
+  position: absolute; inset: 0;
+  z-index: 4;
+  background: radial-gradient(ellipse at center, transparent 28%, rgba(9,42,0,0.7) 100%);
+  pointer-events: none;
+}
+
+/* ── Checklist tracker (right side) ─────────────────────────────────── */
+.te-tracker {
+  position: absolute;
+  right: 4vw; top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex; flex-direction: column; gap: 1.4rem;
+  pointer-events: none;
+}
+.te-tk-label {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+  margin-bottom: 0.2rem;
+}
+.te-tracker-item {
+  display: flex; align-items: center; gap: 0.9rem;
+  opacity: 0.22;
+  transition: opacity 0.5s ease;
+}
+.te-tracker-item.active { opacity: 1; }
+.te-tracker-item.done   { opacity: 0.65; }
+
+.te-tk-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: transparent;
+  flex-shrink: 0;
+  transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+}
+.te-tracker-item.active .te-tk-dot {
+  border-color: var(--gold);
+  background: rgba(196,162,69,0.25);
+  box-shadow: 0 0 10px rgba(196,162,69,0.45);
+}
+.te-tracker-item.done .te-tk-dot {
+  border-color: var(--green-accent);
+  background: var(--green-accent);
+  box-shadow: none;
+}
+.te-tracker-item span {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* ── Active system display (bottom-left) ─────────────────────────────── */
+.te-active-display {
+  position: absolute;
+  bottom: 9vh; left: 6vw;
+  z-index: 20;
+  pointer-events: none;
+  will-change: opacity;
+}
+.te-ad-tag {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.te-ad-tag::before { content: ''; display: block; width: 16px; height: 1px; background: var(--gold); }
+
+.te-ad-system {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 3.8vw, 3.6rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1.1rem;
+}
+.te-ad-bar {
+  width: 200px; height: 1.5px;
+  background: rgba(255,255,255,0.08);
+}
+.te-ad-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--green-accent), var(--gold));
+  width: 0%;
+  will-change: width;
+}
+
+/* ── Completion message (end of engine) ─────────────────────────────── */
+.te-complete-msg {
+  position: absolute; inset: 0;
+  z-index: 25;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  opacity: 0;
+  will-change: opacity;
+  pointer-events: none;
+  padding: 2rem;
+}
+.te-complete-msg h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.02em;
+}
+.te-complete-msg p {
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.48);
+  line-height: 1.9;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. PROPERTY MAP — Hover-interactive aerial view
+   The photo IS the interface. SVG zones overlay the photo.
+   Hover a zone: it lights up + info panel slides in from bottom.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#property-map {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.pm-inner {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Aerial photo base */
+.pm-photo {
+  position: absolute; inset: 0;
+  background: url('../office park.jpeg') center/cover no-repeat;
+  z-index: 1;
+  will-change: filter;
+  transition: filter 0.5s ease;
+}
+.pm-inner.zone-active .pm-photo {
+  filter: brightness(0.55) saturate(0.75);
+}
+
+/* Dark tint so zones read clearly */
+.pm-photo-overlay {
+  position: absolute; inset: 0;
+  background: rgba(9,42,0,0.38);
   z-index: 2;
   pointer-events: none;
 }
 
-/* ── The reveal sweep line ────────────────────────────────────────────────── */
-.ts-sweep {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  z-index: 8;
-  will-change: top;
-  pointer-events: none;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(196,162,69,0.3) 15%,
-    rgba(196,162,69,0.9) 50%,
-    rgba(196,162,69,0.3) 85%,
-    transparent 100%
-  );
-  box-shadow: 0 0 24px 4px rgba(196,162,69,0.35),
-              0 0 60px 8px rgba(196,162,69,0.12);
+/* ── Interactive SVG ──────────────────────────────────────────────────── */
+.pm-svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 3;
 }
 
-/* ── Assessment grid (Stage 2) ────────────────────────────────────────────── */
-.ts-grid {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  will-change: opacity;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(196,162,69,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196,162,69,0.06) 1px, transparent 1px);
-  background-size: 16.667% 14.285%;
+/* Zone groups */
+.pm-zone { cursor: pointer; }
+.pm-zone:focus { outline: none; }
+
+/* Zone shapes — base state (invisible) */
+.pm-z-shape {
+  fill: transparent;
+  transition: fill 0.35s ease, filter 0.35s ease;
+  pointer-events: all;
 }
-
-/* ── Zone assessment labels (Stage 2) ────────────────────────────────────── */
-.ts-zones {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  will-change: opacity;
-  pointer-events: none;
-}
-
-.ts-zone-pin {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.35rem;
-}
-
-.ts-zone-pin-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(196,162,69,0.8);
-  background: rgba(196,162,69,0.3);
-  flex-shrink: 0;
-}
-
-.ts-zone-pin-line {
-  width: 28px;
-  height: 1px;
-  background: rgba(196,162,69,0.45);
-  transform-origin: left;
-}
-
-.ts-zone-pin-text {
-  font-size: 0.52rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(196,162,69,0.8);
-  background: rgba(9,42,0,0.65);
-  padding: 0.18rem 0.5rem;
-  white-space: nowrap;
-  backdrop-filter: blur(4px);
-}
-
-/* ── Narrative text (bottom-left) ─────────────────────────────────────────── */
-.ts-text {
-  position: absolute;
-  bottom: 9vh;
-  left: 6vw;
-  z-index: 20;
-  max-width: 56ch;
-  pointer-events: none;
-}
-
-/* Each stage is stacked absolutely, GSAP cross-fades */
-.ts-stage {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  will-change: opacity, transform;
-}
-
-.ts-act {
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.ts-act::before { content: ''; display: block; width: 18px; height: 1px; background: var(--gold); }
-
-.ts-stage h2 {
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.2vw, 3rem);
-  font-weight: 700;
-  line-height: 1.15;
-  color: var(--white);
-  margin-bottom: 1rem;
-}
-
-.ts-stage p {
-  font-size: 0.92rem;
-  font-weight: 300;
-  line-height: 1.85;
-  color: rgba(255,255,255,0.52);
-  max-width: 48ch;
-}
-
-/* ── Result stats (bottom-right, Stage 4) ─────────────────────────────────── */
-.ts-results {
-  position: absolute;
-  bottom: 9vh;
-  right: 6vw;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  gap: 1.8rem;
-  pointer-events: none;
-  will-change: opacity;
-}
-
-.ts-result-item { text-align: right; }
-
-.ts-result-value {
-  font-family: var(--font-serif);
-  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
-  font-weight: 400;
-  color: var(--gold);
-  line-height: 1;
-  will-change: opacity, transform;
-}
-
-.ts-result-label {
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.28);
-  margin-top: 0.3rem;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   2. PROPERTY MAP
-   ══════════════════════════════════════════════════════════════════════════ */
-
-#property-map { height: 400vh; }
-
-#property-map .pin-inner {
-  display: grid;
-  grid-template-columns: 60% 40%;
-}
-
-/* ── Map panel (left) ─────────────────────────────────────────────────────── */
-.pm-map-panel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8rem 2vw 5rem 4vw;
-  /* Subtle blueprint-style grid */
-  background:
-    linear-gradient(rgba(196,162,69,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196,162,69,0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  background-color: #060e06;
-}
-
-.pm-svg-wrap {
-  width: 100%;
-  max-height: calc(100vh - 14rem);
-  overflow: visible;
-  will-change: opacity;
-}
-
-.pm-svg { width: 100%; height: auto; display: block; }
-
-/* ── SVG element styles ───────────────────────────────────────────────────── */
-
-/* Buildings — non-interactive */
-.pm-building {
-  fill: #0a1a0a;
-  stroke: rgba(255,255,255,0.1);
-  stroke-width: 1.5;
-}
-
-.pm-window {
-  fill: rgba(255,255,255,0.04);
-  stroke: rgba(255,255,255,0.08);
-  stroke-width: 0.5;
-}
-
-/* Zone elements — all start dim */
-.pm-zone {
-  transition: fill 0.65s ease, stroke 0.65s ease, filter 0.65s ease, opacity 0.65s ease;
-  fill: rgba(9,42,0,0.5);
-  stroke: rgba(255,255,255,0.04);
-  stroke-width: 1;
-  opacity: 0.5;
-}
-
-/* Zone-specific active states */
-.pm-zone[data-zone="turf"].z-active {
-  fill: rgba(78,138,48,0.55);
-  stroke: #5a8a38;
-  stroke-width: 1.5;
-  opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(90,138,56,0.4));
-}
-
-.pm-zone[data-zone="trees"].z-active {
-  fill: rgba(22,74,18,0.8);
-  stroke: #2d5a28;
-  stroke-width: 1.5;
-  opacity: 1;
-  filter: drop-shadow(0 0 6px rgba(30,74,18,0.5));
-}
-
-.pm-zone[data-zone="hardscape"].z-active {
-  fill: rgba(196,162,69,0.3);
-  stroke: #c4a245;
-  stroke-width: 1.5;
-  opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(196,162,69,0.3));
-}
-
-.pm-zone[data-zone="beds"].z-active {
-  fill: rgba(196,162,69,0.5);
-  stroke: var(--gold);
-  stroke-width: 2;
-  opacity: 1;
-  filter: drop-shadow(0 0 6px rgba(196,162,69,0.45));
-}
-
-.pm-zone[data-zone="drainage"].z-active {
-  fill: rgba(60,100,130,0.45);
-  stroke: #5a8aaa;
-  stroke-width: 2;
-  opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(60,100,130,0.4));
-}
-
-/* "Full system" — all zones softly glow */
-.pm-zone.z-system {
-  opacity: 0.75;
-  filter: drop-shadow(0 0 4px currentColor);
-}
-
-/* Drainage path specific */
-.pm-drain-path {
+.pm-z-stroke {
   fill: none;
+  stroke: transparent;
   stroke-linecap: round;
+  transition: stroke 0.35s ease, stroke-opacity 0.35s ease, filter 0.35s ease;
 }
 
-/* Compass & scale */
-.pm-compass text, .pm-scale text {
-  font-family: var(--font-sans);
-  fill: rgba(255,255,255,0.3);
-}
-.pm-compass line, .pm-scale line { stroke: rgba(255,255,255,0.2); }
-.pm-compass circle { fill: rgba(9,42,0,0.8); stroke: rgba(196,162,69,0.25); }
-
-/* ── Description panel (right) ────────────────────────────────────────────── */
-.pm-desc-panel {
-  position: relative;
-  padding: 9rem 5vw 4rem 3vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-left: 1px solid rgba(255,255,255,0.05);
-  overflow: hidden;
-}
-
-.pm-desc {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 3vw;
-  right: 5vw;
-  will-change: opacity, transform;
+/* Buildings */
+.pm-building {
+  fill: rgba(0,0,0,0.55);
+  stroke: rgba(255,255,255,0.12);
+  stroke-width: 2;
   pointer-events: none;
 }
 
-.pm-desc-zone-color {
-  width: 28px;
-  height: 2px;
-  margin-bottom: 1.2rem;
+/* Zone hover — each zone gets its own color */
+.pm-zone[data-zone="turf"]:hover .pm-z-shape,
+.pm-zone[data-zone="turf"].pm-active .pm-z-shape {
+  fill: rgba(72, 185, 48, 0.48);
+  filter: drop-shadow(0 0 14px rgba(72,185,48,0.4));
+}
+.pm-zone[data-zone="trees"]:hover .pm-z-shape,
+.pm-zone[data-zone="trees"].pm-active .pm-z-shape {
+  fill: rgba(18, 95, 18, 0.62);
+  filter: drop-shadow(0 0 18px rgba(20,110,20,0.5));
+}
+.pm-zone[data-zone="hardscape"]:hover .pm-z-shape,
+.pm-zone[data-zone="hardscape"].pm-active .pm-z-shape {
+  fill: rgba(196, 162, 69, 0.42);
+  filter: drop-shadow(0 0 12px rgba(196,162,69,0.35));
+}
+.pm-zone[data-zone="beds"]:hover .pm-z-shape,
+.pm-zone[data-zone="beds"].pm-active .pm-z-shape {
+  fill: rgba(196, 155, 70, 0.58);
+  filter: drop-shadow(0 0 12px rgba(196,155,70,0.4));
+}
+.pm-zone[data-zone="drainage"]:hover .pm-z-stroke,
+.pm-zone[data-zone="drainage"].pm-active .pm-z-stroke {
+  stroke: rgba(55, 135, 210, 0.8);
+  filter: drop-shadow(0 0 10px rgba(55,135,210,0.5));
+}
+.pm-zone[data-zone="drainage"]:hover .pm-z-shape,
+.pm-zone[data-zone="drainage"].pm-active .pm-z-shape {
+  fill: rgba(55, 135, 210, 0.55);
+  filter: drop-shadow(0 0 14px rgba(55,135,210,0.5));
 }
 
-.pm-desc h3 {
+/* ── Hover info panel (slides up from bottom) ─────────────────────────── */
+.pm-info-panel {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 20;
+  padding: 2rem 6vw 2.5rem;
+  background: linear-gradient(to top, rgba(9,42,0,0.98) 0%, rgba(9,42,0,0.85) 100%);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.22, 0.68, 0, 1.2);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  will-change: transform;
+}
+.pm-info-panel.visible { transform: translateY(0); }
+
+.pm-ip-swatch {
+  width: 4px;
+  height: 60px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: background 0.35s ease;
+}
+.pm-ip-name {
   font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
   font-weight: 700;
   color: var(--white);
-  line-height: 1.15;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.35rem;
 }
-
-.pm-desc > p {
-  font-size: 0.88rem;
+.pm-ip-desc {
+  font-size: 0.82rem;
   font-weight: 300;
-  line-height: 1.82;
   color: rgba(255,255,255,0.5);
-  margin-bottom: 1.8rem;
-  max-width: 42ch;
+  line-height: 1.7;
+  max-width: 60ch;
 }
-
-.pm-svc-list {
-  list-style: none;
+.pm-ip-services {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
 }
-
-.pm-svc-list li {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: rgba(255,255,255,0.6);
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-
-.pm-svc-list li::before {
-  content: '';
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--gold);
-  flex-shrink: 0;
-}
-
-.pm-desc-coverage {
+.pm-ip-tag {
   font-size: 0.62rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.2);
-  padding-top: 1.2rem;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 2px;
+  color: rgba(255,255,255,0.55);
+  white-space: nowrap;
 }
 
-.pm-desc-coverage strong {
-  color: var(--gold);
-  font-size: 1.1rem;
-  font-weight: 400;
-  font-family: var(--font-serif);
-  letter-spacing: 0;
-  text-transform: none;
-  display: block;
-  margin-top: 0.2rem;
+/* ── Default hint ─────────────────────────────────────────────────────── */
+.pm-hint {
+  position: absolute;
+  bottom: 3vh; left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  display: flex; align-items: center; gap: 0.6rem;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: opacity 0.35s ease;
+  white-space: nowrap;
+  pointer-events: none;
 }
+.pm-hint.hidden { opacity: 0; }
+.pm-hint-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pm-pulse 2s ease-in-out infinite;
+}
+@keyframes pm-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.4); }
+}
+
 
 /* ══════════════════════════════════════════════════════════════════════════
-   3. SEASONAL EVOLUTION
+   3. SEASONAL EVOLUTION — One continuous visual
+   One viewport. Four seasons. Zero panels. Zero cards.
+   The landscape transforms. The season name is the only text.
    ══════════════════════════════════════════════════════════════════════════ */
 
 #seasonal-evolution { height: 400vh; }
 
-/* ── Season image layers ──────────────────────────────────────────────────── */
+/* ── Season images — stacked full screen ──────────────────────────────── */
 .se-img {
   position: absolute;
   inset: -4%;
@@ -496,42 +456,37 @@
   background-position: center;
   will-change: opacity, filter;
 }
-
 .se-spring { background-image: url('../spring.jpeg'); }
 .se-summer { background-image: url('../summer.jpeg'); }
 .se-fall   { background-image: url('../fall.jpeg');   }
 .se-winter { background-image: url('../winter.jpeg'); }
 
-/* Dark gradient at top + bottom */
+/* ── Gradient vignette ────────────────────────────────────────────────── */
 .se-gradient {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
+  z-index: 2;
   background: linear-gradient(
     to bottom,
-    rgba(9,42,0,0.6)  0%,
-    rgba(9,42,0,0.1) 40%,
-    rgba(9,42,0,0.1) 60%,
-    rgba(9,42,0,0.75) 100%
+    rgba(9,42,0,0.55) 0%,
+    transparent 30%,
+    transparent 65%,
+    rgba(9,42,0,0.7) 100%
   );
-  z-index: 2;
   pointer-events: none;
 }
 
-/* ── Giant season name (background typography) ────────────────────────────── */
+/* ── Season name — the dominant typographic element ──────────────────── */
 .se-names {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   pointer-events: none;
+  overflow: hidden;
 }
-
 .se-name {
   position: absolute;
   font-family: var(--font-serif);
-  font-size: clamp(14vw, 18vw, 22vw);
+  font-size: clamp(18vw, 22vw, 26vw);
   font-weight: 700;
   letter-spacing: -0.04em;
   text-transform: uppercase;
@@ -540,173 +495,62 @@
   user-select: none;
   white-space: nowrap;
 }
+.se-name-spring { color: rgba(100, 185, 60, 0.14); }
+.se-name-summer { color: rgba(220, 185, 60, 0.14); }
+.se-name-fall   { color: rgba(200, 105, 38, 0.14); }
+.se-name-winter { color: rgba(130, 175, 215, 0.14); }
 
-.se-name-spring { color: rgba(90,138,56,0.12); }
-.se-name-summer { color: rgba(196,162,69,0.12); }
-.se-name-fall   { color: rgba(180,100,40,0.12); }
-.se-name-winter { color: rgba(120,160,200,0.12); }
-
-/* ── Season content (bottom) ──────────────────────────────────────────────── */
-.se-content {
+/* ── Season label — small current-season indicator ───────────────────── */
+.se-label {
   position: absolute;
-  bottom: 8vh;
-  left: 6vw;
-  right: 6vw;
+  bottom: 8vh; left: 6vw;
   z-index: 10;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 4rem;
   pointer-events: none;
 }
-
-.se-season-block {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  will-change: opacity, transform;
-}
-
-.se-season-eyebrow {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.se-season-eyebrow::before {
-  content: '';
-  display: block;
-  width: 16px;
-  height: 1px;
-}
-
-.se-spring-block .se-season-eyebrow { color: #7ab85a; }
-.se-spring-block .se-season-eyebrow::before { background: #7ab85a; }
-
-.se-summer-block .se-season-eyebrow { color: var(--gold-light); }
-.se-summer-block .se-season-eyebrow::before { background: var(--gold-light); }
-
-.se-fall-block .se-season-eyebrow { color: #d4834a; }
-.se-fall-block .se-season-eyebrow::before { background: #d4834a; }
-
-.se-winter-block .se-season-eyebrow { color: #88b4d4; }
-.se-winter-block .se-season-eyebrow::before { background: #88b4d4; }
-
-.se-season-block h3 {
+.se-label-season {
   font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
-  font-weight: 700;
-  color: var(--white);
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
-}
-
-.se-season-block p {
-  font-size: 0.85rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.45);
-  max-width: 38ch;
-  line-height: 1.7;
-}
-
-/* Services list (right side of seasonal section) */
-.se-svc-panel {
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  font-weight: 600;
   will-change: opacity, transform;
-  min-width: 220px;
 }
 
-.se-svc-panel ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.se-svc-panel li {
-  font-size: 0.78rem;
-  font-weight: 400;
-  color: rgba(255,255,255,0.55);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  text-align: right;
-  flex-direction: row-reverse;
-}
-
-.se-svc-panel li::after {
-  content: '';
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.se-spring-svc li::after { background: #7ab85a; }
-.se-summer-svc li::after { background: var(--gold-light); }
-.se-fall-svc li::after   { background: #d4834a; }
-.se-winter-svc li::after { background: #88b4d4; }
-
-/* Season progress indicator */
+/* ── Side pip indicator ───────────────────────────────────────────────── */
 .se-indicator {
   position: absolute;
-  top: 50%;
-  right: 3vw;
+  top: 50%; right: 3.5vw;
   transform: translateY(-50%);
   z-index: 20;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  display: flex; flex-direction: column; gap: 0.85rem;
   align-items: center;
   pointer-events: none;
 }
-
 .se-ind-pip {
-  width: 4px;
-  height: 4px;
+  width: 4px; height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  transition: background 0.5s ease, transform 0.5s var(--ease-out), height 0.5s ease;
+  background: rgba(255,255,255,0.18);
+  transition: background 0.5s ease, transform 0.5s ease, height 0.5s ease, border-radius 0.5s ease;
 }
-
 .se-ind-pip.active {
-  height: 24px;
+  height: 28px;
   border-radius: 2px;
 }
+.se-ind-pip-spring.active  { background: rgba(100,185,60,0.9); }
+.se-ind-pip-summer.active  { background: rgba(220,185,60,0.9); }
+.se-ind-pip-fall.active    { background: rgba(200,105,38,0.9); }
+.se-ind-pip-winter.active  { background: rgba(130,175,215,0.9); }
 
-.se-ind-pip-spring.active  { background: #7ab85a; }
-.se-ind-pip-summer.active  { background: var(--gold-light); }
-.se-ind-pip-fall.active    { background: #d4834a; }
-.se-ind-pip-winter.active  { background: #88b4d4; }
 
-/* ─── Responsive ──────────────────────────────────────────────────────────── */
+/* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  #property-map .pin-inner { grid-template-columns: 1fr; }
-  .pm-desc-panel {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.5rem 5vw 4rem;
-    background: linear-gradient(to top, rgba(9,42,0,0.98) 0%, rgba(9,42,0,0.9) 100%);
-    border-left: none;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    max-height: 45%;
-    overflow: hidden;
-  }
-  .pm-desc { position: relative; top: auto; transform: none; left: 0; right: 0; }
-  .pm-map-panel { padding: 8rem 3vw 55% 3vw; }
+  .te-tracker { right: 3vw; gap: 1rem; }
+  .te-tracker-item span { font-size: 0.62rem; }
+  .pm-info-panel { grid-template-columns: auto 1fr; }
+  .pm-ip-services { display: none; }
 }
 
 @media (max-width: 768px) {
-  .ts-results { display: none; }
-  .se-name { font-size: 20vw; }
-  .se-svc-panel { display: none; }
-  .ts-stage h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+  .te-tracker { display: none; }
+  .se-name { font-size: 28vw; }
+  .pm-ip-services { display: none; }
+  .te-ad-system { font-size: clamp(1.6rem, 6vw, 2.4rem); }
 }

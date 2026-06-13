@@ -1,73 +1,78 @@
 'use strict';
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PROPERTY STORY — Three Pinned Scroll Narrative Engines
+   PROPERTY STORY — Three Cinematic Engines
 
-   All timelines use ease:'none' so animation progress == scroll progress.
-   scrub:1.5 adds cinematic lag; nothing fires independently of scroll.
-
-   Section heights → timeline units:
-     Transformation  450vh → 100 units  (1 unit = 4.5vh)
-     Property Map    400vh → 5 zones    (zone checkpoints, not full-scrub)
-     Seasonal Evo    400vh → 100 units  (1 unit = 4vh)
+   1. Transformation Engine  — 600vh scrub, 5 zone SVG overlays
+   2. Property Map           — hover-interactive aerial SVG
+   3. Seasonal Evolution     — 400vh image morph, no text panels
    ═══════════════════════════════════════════════════════════════════════════ */
 
 (function () {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   gsap.registerPlugin(ScrollTrigger);
 
+
   /* ════════════════════════════════════════════════════════════════════════
-     1. TRANSFORMATION STORY
+     1. TRANSFORMATION ENGINE
      ════════════════════════════════════════════════════════════════════════ */
-  (function initTransformation() {
+  (function initTransformationEngine() {
     const section = document.getElementById('transformation-story');
     if (!section) return;
 
-    /* ── Initial states ─────────────────────────────────────────────────── */
-    gsap.set('.ts-before', { filter: 'brightness(0.42) saturate(0.55)' });
-    gsap.set('.ts-after',  { clipPath: 'inset(100% 0 0 0)', filter: 'brightness(0.68)' });
-    gsap.set('.ts-sweep',  { top: '101%', opacity: 1 });
-    gsap.set('.ts-grid',   { opacity: 0 });
-    gsap.set('.ts-zones',  { opacity: 0 });
+    /* System definitions — start/peak/exit are timeline units (0-100) */
+    const SYSTEMS = [
+      { id: 'turf',      label: 'Turf & Lawn',      start: 8,  peak: 22, exit: 82 },
+      { id: 'drainage',  label: 'Drainage',          start: 26, peak: 38, exit: 82 },
+      { id: 'beds',      label: 'Landscape Beds',    start: 42, peak: 52, exit: 82 },
+      { id: 'trees',     label: 'Trees & Canopy',    start: 56, peak: 65, exit: 82 },
+      { id: 'hardscape', label: 'Hardscape',         start: 69, peak: 77, exit: 82 },
+    ];
 
-    /* All four stages start invisible */
-    gsap.set(['.ts-s1','.ts-s2','.ts-s3','.ts-s4'], { opacity: 0 });
-    gsap.set('.ts-results',                           { opacity: 0 });
-    gsap.set('.ts-result-value', { opacity: 0, y: 28 });
+    /* ── Drainage stroke-dash setup ───────────────────────────────────── */
+    const drainFlow  = section.querySelector('.te-drain-flow');
+    let   drainLen   = 0;
+    if (drainFlow) {
+      drainLen = drainFlow.getTotalLength ? drainFlow.getTotalLength() : 800;
+      gsap.set(drainFlow, { strokeDasharray: drainLen, strokeDashoffset: drainLen });
+    }
 
-    /* ── Master timeline (100 units scrubbed to 450vh) ───────────────────── */
+    /* ── Initial states ────────────────────────────────────────────────── */
+    gsap.set('.te-before',          { filter: 'brightness(0.42) saturate(0.48)' });
+    gsap.set('.te-after',           { clipPath: 'inset(100% 0 0 0)', opacity: 1 });
+    gsap.set('.te-zone-group',      { opacity: 0 });
+    gsap.set('.te-active-display',  { opacity: 0 });
+    gsap.set('.te-complete-msg',    { opacity: 0 });
+    gsap.set('.te-ad-fill',         { width: '0%' });
+
+    /* ── Master timeline ───────────────────────────────────────────────── */
     const tl = gsap.timeline({ defaults: { ease: 'none' } });
 
-    /* ── STAGE 1: Before — Establish the property ─────────────────────── */
+    /* Establish neglect */
+    tl.to('.te-before', { filter: 'brightness(0.52) saturate(0.58)', duration: 8 }, 0);
+
+    /* Each system: fade in its zone, hold, then fade at grand reveal */
+    SYSTEMS.forEach(sys => {
+      const g = `#te-${sys.id}`;
+      tl.to(g, { opacity: 1, duration: sys.peak - sys.start }, sys.start);
+      tl.to(g, { opacity: 0, duration: 5 }, sys.exit);
+      /* Drainage gets path draw in addition */
+      if (sys.id === 'drainage' && drainFlow && drainLen) {
+        tl.to(drainFlow, { strokeDashoffset: 0, duration: (sys.peak - sys.start) }, sys.start);
+      }
+    });
+
+    /* Grand reveal */
     tl
-      .to('.ts-before',  { filter: 'brightness(0.55) saturate(0.7)', duration: 6 }, 0)
-      .to('.ts-s1',      { opacity: 1, duration: 5 },                               3)
+      .to('.te-active-display',  { opacity: 0, duration: 4 },                   80)
+      .to('.te-before',          { opacity: 0, duration: 8 },                   82)
+      .to('.te-after',           { clipPath: 'inset(0% 0 0 0)', duration: 12 }, 84)
+      .to('.te-complete-msg',    { opacity: 1, duration: 7 },                   92)
+      .to('.te-progress-fill',   { width: '100%', duration: 100 },               0);
 
-    /* ── STAGE 2: Assessment — Grid overlay appears ───────────────────── */
-      .to('.ts-s1',      { opacity: 0, duration: 4 },                              16)
-      .to('.ts-grid',    { opacity: 1, duration: 6 },                              18)
-      .to('.ts-zones',   { opacity: 1, duration: 5 },                              21)
-      .to('.ts-s2',      { opacity: 1, duration: 5 },                              21)
-
-    /* ── STAGE 3: Transformation — Sweep reveals the after image ─────── */
-    /* Grid + stage 2 exit */
-      .to(['.ts-grid','.ts-zones','.ts-s2'], { opacity: 0, duration: 5 },         28)
-      .to('.ts-s3',      { opacity: 1, duration: 5 },                              31)
-    /* The sweep: 30 units drives clip-path from fully hidden to fully revealed */
-      .to('.ts-sweep',   { top: '-1%', duration: 32 },                             27)
-      .to('.ts-after',   { clipPath: 'inset(0% 0 0 0)', duration: 32 },            27)
-    /* After image brightens as it reveals */
-      .to('.ts-after',   { filter: 'brightness(0.72)', duration: 15 },             44)
-
-    /* ── STAGE 4: After — Result and company proof ────────────────────── */
-      .to('.ts-s3',      { opacity: 0, duration: 4 },                              60)
-      .to('.ts-sweep',   { opacity: 0, duration: 5 },                              59)
-      .to('.ts-s4',      { opacity: 1, duration: 5 },                              63)
-      .to('.ts-results', { opacity: 1, duration: 4 },                              67)
-      .to('.ts-result-value', { opacity: 1, y: 0, stagger: 4, duration: 5 },       69)
-
-    /* ── Progress fill ───────────────────────────────────────────────── */
-      .to('.ts-progress-fill', { width: '100%', duration: 100 },                    0);
+    /* ── ScrollTrigger ─────────────────────────────────────────────────── */
+    let lastLabel = '';
+    let lastSysIdx = -2;
 
     ScrollTrigger.create({
       trigger: '#transformation-story',
@@ -75,183 +80,226 @@
       end:     'bottom bottom',
       scrub:   1.5,
       animation: tl,
-    });
-  })();
 
+      onUpdate (self) {
+        const p = self.progress * 100;
 
-  /* ════════════════════════════════════════════════════════════════════════
-     2. PROPERTY MAP — Zone-by-zone scroll activation
-        Rather than a single scrub timeline, each zone activates via its
-        own ScrollTrigger checkpoint so transitions play at natural speed.
-     ════════════════════════════════════════════════════════════════════════ */
-  (function initPropertyMap() {
-    const section = document.getElementById('property-map');
-    if (!section) return;
+        /* Find active system */
+        let activeSys = null;
+        let activeSysIdx = -1;
+        for (let i = 0; i < SYSTEMS.length; i++) {
+          if (p >= SYSTEMS[i].start && p < SYSTEMS[i].exit) {
+            activeSys = SYSTEMS[i];
+            activeSysIdx = i;
+          }
+        }
 
-    /* Initial state — map fades in, all zones dim, all descriptions hidden */
-    gsap.set('.pm-svg-wrap', { opacity: 0, y: 30 });
-    gsap.set('.pm-desc',     { opacity: 0, x: 40 });
+        /* Update tracker items only when state changes */
+        if (activeSysIdx !== lastSysIdx) {
+          lastSysIdx = activeSysIdx;
 
-    /* Fade map in as section enters */
-    ScrollTrigger.create({
-      trigger: section,
-      start:   'top 60%',
-      onEnter: () => gsap.to('.pm-svg-wrap', { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' }),
-    });
+          SYSTEMS.forEach((sys, i) => {
+            const item = document.querySelector(`.te-tracker-item[data-system="${sys.id}"]`);
+            if (!item) return;
+            const isPast   = p >= sys.peak;
+            const isCurrent = i === activeSysIdx;
+            item.classList.toggle('done',   isPast && !isCurrent);
+            item.classList.toggle('active', isCurrent);
+          });
 
-    /* Zone data — the order they activate and their description panel IDs */
-    const zones = [
-      { name: 'turf',      descId: '.pm-desc-turf',      startPct: 0.08, endPct: 0.30 },
-      { name: 'trees',     descId: '.pm-desc-trees',     startPct: 0.28, endPct: 0.50 },
-      { name: 'hardscape', descId: '.pm-desc-hardscape', startPct: 0.48, endPct: 0.68 },
-      { name: 'beds',      descId: '.pm-desc-beds',      startPct: 0.66, endPct: 0.84 },
-      { name: 'drainage',  descId: '.pm-desc-drainage',  startPct: 0.82, endPct: 0.96 },
-    ];
+          /* Update label text */
+          const adDisplay = document.querySelector('.te-active-display');
+          const adSystem  = document.querySelector('.te-ad-system');
 
-    /* Helpers */
-    function activateZone(name) {
-      /* Deactivate all zones */
-      document.querySelectorAll('.pm-zone').forEach(el => {
-        el.classList.remove('z-active', 'z-system');
-      });
-      /* Activate target zone elements */
-      document.querySelectorAll(`.pm-zone[data-zone="${name}"]`).forEach(el => {
-        el.classList.add('z-active');
-      });
-    }
+          if (p < 8 || p >= 82) {
+            if (adDisplay) gsap.to(adDisplay, { opacity: 0, duration: 0.4 });
+          } else if (activeSys) {
+            if (adDisplay) gsap.to(adDisplay, { opacity: 1, duration: 0.4 });
+            if (adSystem && activeSys.label !== lastLabel) {
+              lastLabel = activeSys.label;
+              /* Micro-fade for text swap */
+              gsap.to(adSystem, {
+                opacity: 0, duration: 0.15,
+                onComplete () {
+                  adSystem.textContent = activeSys.label;
+                  gsap.to(adSystem, { opacity: 1, duration: 0.25 });
+                }
+              });
+            }
+          }
+        }
 
-    function showDesc(descId) {
-      /* Hide all descriptions */
-      gsap.to('.pm-desc', { opacity: 0, x: 40, duration: 0.35, ease: 'power2.in' });
-      /* Show target after brief delay */
-      setTimeout(() => {
-        const el = document.querySelector(descId);
-        if (el) gsap.to(el, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' });
-      }, 200);
-    }
-
-    function clearZones() {
-      document.querySelectorAll('.pm-zone').forEach(el => el.classList.remove('z-active', 'z-system'));
-      gsap.to('.pm-desc', { opacity: 0, x: 40, duration: 0.35, ease: 'power2.in' });
-    }
-
-    function systemState() {
-      document.querySelectorAll('.pm-zone').forEach(el => el.classList.add('z-system'));
-    }
-
-    /* Build one ScrollTrigger per zone checkpoint */
-    zones.forEach(zone => {
-      const sectionHeight = section.offsetHeight;
-      const startOffset   = zone.startPct * sectionHeight;
-      const endOffset     = zone.endPct   * sectionHeight;
-
-      ScrollTrigger.create({
-        trigger: section,
-        start:   `top+=${startOffset} top`,
-        end:     `top+=${endOffset} top`,
-        onEnter:     () => { activateZone(zone.name); showDesc(zone.descId); },
-        onLeave:     () => clearZones(),
-        onEnterBack: () => { activateZone(zone.name); showDesc(zone.descId); },
-        onLeaveBack: () => clearZones(),
-      });
-    });
-
-    /* Final "full system" state */
-    ScrollTrigger.create({
-      trigger: section,
-      start:   'top+=94% top',
-      end:     'bottom bottom',
-      onEnter:     () => { clearZones(); systemState(); showDesc('.pm-desc-system'); },
-      onLeave:     () => clearZones(),
-      onEnterBack: () => { clearZones(); systemState(); showDesc('.pm-desc-system'); },
-      onLeaveBack: () => clearZones(),
-    });
-
-    /* Progress fill */
-    gsap.to('.pm-progress-fill', {
-      width: '100%',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start:   'top top',
-        end:     'bottom bottom',
-        scrub:   0.5,
+        /* System progress bar fill (0→100% within each system's range) */
+        const adFill = document.querySelector('.te-ad-fill');
+        if (adFill && activeSys) {
+          const pct = Math.max(0, Math.min(100,
+            ((p - activeSys.start) / (activeSys.exit - activeSys.start)) * 100
+          ));
+          adFill.style.width = pct + '%';
+        }
       }
     });
   })();
 
 
   /* ════════════════════════════════════════════════════════════════════════
-     3. SEASONAL EVOLUTION
+     2. PROPERTY MAP — Hover-interactive aerial zones
+     CSS handles the hover highlight colors.
+     JS manages the info panel content and visibility.
+     ════════════════════════════════════════════════════════════════════════ */
+  (function initPropertyMap() {
+    const section = document.getElementById('property-map');
+    if (!section) return;
+
+    /* Zone data */
+    const ZONES = {
+      turf: {
+        label: 'Turf & Lawn',
+        swatch: '#5a8a38',
+        desc: 'Commercial precision mowing, fertilization, aeration & drought management across all open ground.',
+        services: ['Mowing & Edging', 'Fertilization', 'Aeration', 'Drought Management'],
+      },
+      trees: {
+        label: 'Trees & Canopy',
+        swatch: '#2d5a28',
+        desc: 'Structural pruning, storm-risk assessment and canopy health programs — trees managed as assets, not afterthoughts.',
+        services: ['Structural Pruning', 'Canopy Health', 'Storm Assessment', 'Young Tree Care'],
+      },
+      hardscape: {
+        label: 'Hardscape & Access',
+        swatch: '#c4a245',
+        desc: 'Every walkway, entry and paved surface kept clean, edged and well-defined year-round.',
+        services: ['Pressure Washing', 'Edging & Detailing', 'Salt Removal', 'Surface Inspection'],
+      },
+      beds: {
+        label: 'Landscape Beds',
+        swatch: '#b8943c',
+        desc: 'Seasonal color programs, mulch refresh, weed control and perennial management — the signature of a cared-for property.',
+        services: ['Seasonal Color', 'Mulch Install', 'Weed Control', 'Bed Edging'],
+      },
+      drainage: {
+        label: 'Drainage & Infrastructure',
+        swatch: '#4a88b8',
+        desc: 'Stormwater infrastructure managed proactively — before flooding compounds every other landscape problem.',
+        services: ['Catch Basin Maintenance', 'Grade Correction', 'French Drain', '24hr Storm Response'],
+      },
+    };
+
+    const inner      = section.querySelector('.pm-inner');
+    const infoPanel  = section.querySelector('.pm-info-panel');
+    const ipSwatch   = section.querySelector('.pm-ip-swatch');
+    const ipName     = section.querySelector('.pm-ip-name');
+    const ipDesc     = section.querySelector('.pm-ip-desc');
+    const ipServices = section.querySelector('.pm-ip-services');
+    const hint       = section.querySelector('.pm-hint');
+
+    let activeZone = null;
+
+    function activateZone(zoneName) {
+      if (activeZone === zoneName) return;
+      activeZone = zoneName;
+
+      const data = ZONES[zoneName];
+      if (!data) return;
+
+      /* Mark body for CSS brightness effect */
+      inner.classList.add('zone-active');
+
+      /* Deactivate all zones, activate target */
+      section.querySelectorAll('.pm-zone').forEach(g => {
+        g.classList.remove('pm-active');
+      });
+      const target = section.querySelector(`.pm-zone[data-zone="${zoneName}"]`);
+      if (target) target.classList.add('pm-active');
+
+      /* Populate panel */
+      if (ipSwatch)   ipSwatch.style.background = data.swatch;
+      if (ipName)     ipName.textContent = data.label;
+      if (ipDesc)     ipDesc.textContent = data.desc;
+      if (ipServices) {
+        ipServices.innerHTML = data.services
+          .map(s => `<div class="pm-ip-tag">${s}</div>`)
+          .join('');
+      }
+
+      /* Show panel */
+      if (infoPanel) infoPanel.classList.add('visible');
+      if (hint)      hint.classList.add('hidden');
+    }
+
+    function deactivateZone() {
+      activeZone = null;
+      inner.classList.remove('zone-active');
+      section.querySelectorAll('.pm-zone').forEach(g => g.classList.remove('pm-active'));
+      if (infoPanel) infoPanel.classList.remove('visible');
+      if (hint)      hint.classList.remove('hidden');
+    }
+
+    /* Attach hover events to each zone group */
+    section.querySelectorAll('.pm-zone').forEach(g => {
+      const zoneName = g.dataset.zone;
+
+      g.addEventListener('mouseenter', () => activateZone(zoneName));
+      g.addEventListener('focus',      () => activateZone(zoneName));
+      g.addEventListener('mouseleave', deactivateZone);
+      g.addEventListener('blur',       deactivateZone);
+    });
+
+    /* Intro animation when section scrolls into view */
+    gsap.fromTo(section, { opacity: 0 }, {
+      opacity: 1, duration: 1.2, ease: 'power2.out',
+      scrollTrigger: { trigger: section, start: 'top 80%', once: true }
+    });
+  })();
+
+
+  /* ════════════════════════════════════════════════════════════════════════
+     3. SEASONAL EVOLUTION — One continuous morph
+     Four stacked images. Scrub drives opacity between them.
+     No panels. No text blocks. Just the landscape changing.
      ════════════════════════════════════════════════════════════════════════ */
   (function initSeasons() {
     const section = document.getElementById('seasonal-evolution');
     if (!section) return;
 
-    const SEASONS = ['spring', 'summer', 'fall', 'winter'];
-
-    /* ── Initial states ─────────────────────────────────────────────────── */
-    /* Spring starts visible, others hidden */
-    gsap.set('.se-summer, .se-fall, .se-winter', { opacity: 0 });
-    gsap.set('.se-spring',  { opacity: 1, filter: 'brightness(0.6) saturate(1.05)' });
-
-    gsap.set('.se-name-summer, .se-name-fall, .se-name-winter', { opacity: 0, y: 20 });
-    gsap.set('.se-name-spring',   { opacity: 1, y: 0 });
-
-    gsap.set('.se-summer-block, .se-fall-block, .se-winter-block', { opacity: 0, y: 30 });
-    gsap.set('.se-spring-block',  { opacity: 1, y: 0 });
-
-    gsap.set('.se-summer-svc, .se-fall-svc, .se-winter-svc', { opacity: 0 });
-    gsap.set('.se-spring-svc',    { opacity: 1 });
-
-    /* ── Indicator pips ───────────────────────────────────────────────── */
-    const pips = document.querySelectorAll('.se-ind-pip');
+    const pips = section.querySelectorAll('.se-ind-pip');
     function setPip(idx) {
       pips.forEach((p, i) => p.classList.toggle('active', i === idx));
     }
-    setPip(0); /* spring default */
+    setPip(0);
 
-    /* ── Single scrubbed timeline (100 units → 400vh) ─────────────────── */
+    /* ── Initial states ────────────────────────────────────────────────── */
+    gsap.set('.se-summer, .se-fall, .se-winter', { opacity: 0 });
+    gsap.set('.se-spring', { opacity: 1, filter: 'brightness(0.62) saturate(1.05)' });
+
+    /* Season names: spring visible, rest hidden and offset */
+    gsap.set('.se-name-summer, .se-name-fall, .se-name-winter', { opacity: 0, y: 30 });
+    gsap.set('.se-name-spring', { opacity: 1, y: 0 });
+
+    /* ── Timeline (100 units → 400vh) ──────────────────────────────────── */
     const tl = gsap.timeline({ defaults: { ease: 'none' } });
 
-    /* ─ SPRING (0-25) active, held ───────────────────────────────────── */
-
-    /* ─ SPRING → SUMMER CROSSFADE (22-32) ────────────────────────────── */
+    /* Spring → Summer  (t:20-32) */
     tl
-      .to('.se-spring-block',  { opacity: 0, y: -20, duration: 8 }, 22)
-      .to('.se-spring-svc',    { opacity: 0, duration: 6 },          23)
-      .to('.se-name-spring',   { opacity: 0, y: -15, duration: 8 }, 22)
-      .to('.se-spring',        { opacity: 0, duration: 10 },         21)
+      .to('.se-spring',      { opacity: 0, duration: 12 },                     20)
+      .to('.se-name-spring', { opacity: 0, y: -25, duration: 10 },             20)
+      .to('.se-summer',      { opacity: 1, filter: 'brightness(0.68) saturate(1.1)', duration: 12 }, 21)
+      .to('.se-name-summer', { opacity: 1, y: 0, duration: 10 },               24)
 
-      .to('.se-summer',        { opacity: 1, filter: 'brightness(0.65) saturate(1.1)', duration: 10 }, 22)
-      .to('.se-name-summer',   { opacity: 1, y: 0, duration: 8 },    25)
-      .to('.se-summer-block',  { opacity: 1, y: 0, duration: 7 },    27)
-      .to('.se-summer-svc',    { opacity: 1, duration: 6 },          29)
+    /* Summer → Fall  (t:46-58) */
+      .to('.se-summer',      { opacity: 0, duration: 12 },                     46)
+      .to('.se-name-summer', { opacity: 0, y: -25, duration: 10 },             46)
+      .to('.se-fall',        { opacity: 1, filter: 'brightness(0.6) saturate(0.95)', duration: 12 }, 47)
+      .to('.se-name-fall',   { opacity: 1, y: 0, duration: 10 },               50)
 
-    /* ─ SUMMER → FALL CROSSFADE (48-58) ──────────────────────────────── */
-      .to('.se-summer-block',  { opacity: 0, y: -20, duration: 7 }, 48)
-      .to('.se-summer-svc',    { opacity: 0, duration: 6 },          49)
-      .to('.se-name-summer',   { opacity: 0, y: -15, duration: 8 }, 48)
-      .to('.se-summer',        { opacity: 0, duration: 10 },         47)
+    /* Fall → Winter  (t:72-84) */
+      .to('.se-fall',        { opacity: 0, duration: 12 },                     72)
+      .to('.se-name-fall',   { opacity: 0, y: -25, duration: 10 },             72)
+      .to('.se-winter',      { opacity: 1, filter: 'brightness(0.5) saturate(0.62)', duration: 12 }, 73)
+      .to('.se-name-winter', { opacity: 1, y: 0, duration: 10 },               76)
 
-      .to('.se-fall',          { opacity: 1, filter: 'brightness(0.6) saturate(0.95)', duration: 10 }, 48)
-      .to('.se-name-fall',     { opacity: 1, y: 0, duration: 8 },    51)
-      .to('.se-fall-block',    { opacity: 1, y: 0, duration: 7 },    53)
-      .to('.se-fall-svc',      { opacity: 1, duration: 6 },          55)
-
-    /* ─ FALL → WINTER CROSSFADE (73-83) ──────────────────────────────── */
-      .to('.se-fall-block',    { opacity: 0, y: -20, duration: 7 }, 73)
-      .to('.se-fall-svc',      { opacity: 0, duration: 6 },          74)
-      .to('.se-name-fall',     { opacity: 0, y: -15, duration: 8 }, 73)
-      .to('.se-fall',          { opacity: 0, duration: 10 },         72)
-
-      .to('.se-winter',        { opacity: 1, filter: 'brightness(0.52) saturate(0.65)', duration: 10 }, 73)
-      .to('.se-name-winter',   { opacity: 1, y: 0, duration: 8 },    76)
-      .to('.se-winter-block',  { opacity: 1, y: 0, duration: 7 },    78)
-      .to('.se-winter-svc',    { opacity: 1, duration: 6 },          80)
-
-    /* ─ Progress ──────────────────────────────────────────────────────── */
-      .to('.se-progress-fill', { width: '100%', duration: 100 },      0);
+    /* Progress fill */
+      .to('.se-progress-fill', { width: '100%', duration: 100 },                0);
 
     ScrollTrigger.create({
       trigger: section,
@@ -260,10 +308,9 @@
       scrub:   1.5,
       animation: tl,
 
-      onUpdate(self) {
+      onUpdate (self) {
         const p = self.progress;
-        const idx = p >= 0.73 ? 3 : p >= 0.48 ? 2 : p >= 0.22 ? 1 : 0;
-        setPip(idx);
+        setPip(p >= 0.72 ? 3 : p >= 0.46 ? 2 : p >= 0.20 ? 1 : 0);
       }
     });
   })();
