@@ -97,71 +97,28 @@
   pointer-events: none;
 }
 
-/* ── Stage tracker (right) ────────────────────────────────────────────── */
-.te-tracker {
-  position: absolute;
-  right: 4vw; top: 50%; transform: translateY(-50%);
-  z-index: 20; display: flex; flex-direction: column; gap: 1.4rem;
-  pointer-events: none;
-}
-.te-tk-label {
-  font-size: 0.5rem; font-weight: 700;
-  letter-spacing: 0.3em; text-transform: uppercase;
-  color: rgba(255,255,255,0.16); margin-bottom: 0.2rem;
-}
-.te-tracker-item {
-  display: flex; align-items: center; gap: 0.85rem;
-  opacity: 0.2; transition: opacity 0.45s ease;
-}
-.te-tracker-item.active { opacity: 1; }
-.te-tracker-item.done   { opacity: 0.6; }
-
-.te-tk-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.22); background: transparent;
-  flex-shrink: 0;
-  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-}
-.te-tracker-item.active .te-tk-dot {
-  border-color: var(--gold); background: rgba(196,162,69,0.22);
-  box-shadow: 0 0 10px rgba(196,162,69,0.5);
-}
-.te-tracker-item.done .te-tk-dot {
-  border-color: var(--green-accent); background: var(--green-accent);
-}
-.te-tracker-item span {
-  font-size: 0.7rem; font-weight: 400;
-  color: rgba(255,255,255,0.88); letter-spacing: 0.04em; white-space: nowrap;
-}
-
-/* ── Active stage name (bottom-left) ─────────────────────────────────── */
-.te-active-display {
+/* ── One cinematic word (bottom-left) ────────────────────────────────── */
+.te-word {
   position: absolute; bottom: 8vh; left: 6vw;
   z-index: 20; pointer-events: none; will-change: opacity;
-}
-.te-ad-system {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3.8rem);
-  font-weight: 700; color: var(--white); line-height: 1.1;
-  min-height: 1.1em;
+  font-size: clamp(4.5rem, 9vw, 9.5rem);
+  font-weight: 700; color: rgba(255,255,255,0.9);
+  line-height: 1; letter-spacing: -0.03em;
+  min-height: 1em;
 }
 
 /* ── Completion message ───────────────────────────────────────────────── */
 .te-complete-msg {
   position: absolute; inset: 0; z-index: 25;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; text-align: center;
-  opacity: 0; will-change: opacity; pointer-events: none; padding: 2rem;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  opacity: 0; will-change: opacity; pointer-events: none;
 }
 .te-complete-msg h2 {
   font-family: var(--font-serif);
-  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  font-size: clamp(5rem, 11vw, 13rem);
   font-weight: 700; color: var(--white);
-  line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.02em;
-}
-.te-complete-msg p {
-  font-size: 0.92rem; font-weight: 300;
-  color: rgba(255,255,255,0.45); line-height: 1.9;
+  line-height: 1; letter-spacing: -0.04em;
 }
 
 
@@ -371,13 +328,13 @@
 
 /* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .te-tracker { right: 3vw; gap: 1rem; }
   .pm-info-panel { grid-template-columns: 4px 1fr; }
   .pm-ip-services { display: none; }
+  .te-word { font-size: clamp(3.5rem, 8vw, 7rem); }
 }
 
 @media (max-width: 768px) {
-  .te-tracker { display: none; }
+  .te-word { font-size: clamp(3rem, 12vw, 5.5rem); bottom: 5vh; left: 5vw; }
   .se-name { font-size: 30vw; }
   #transformation-story { height: 280vh; }
   #seasonal-evolution { height: 320vh; }

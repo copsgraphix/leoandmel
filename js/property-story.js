@@ -28,18 +28,18 @@
 
     /* Restoration stages — same order a real crew would tackle them */
     const SYSTEMS = [
-      { id: 'turf',      label: 'Grass Cut',        start: 8,  peak: 22, exit: 84 },
-      { id: 'trees',     label: 'Shrubs Trimmed',   start: 24, peak: 36, exit: 84 },
-      { id: 'beds',      label: 'Beds Installed',   start: 38, peak: 50, exit: 84 },
-      { id: 'drainage',  label: 'Drainage Active',  start: 52, peak: 63, exit: 84 },
-      { id: 'hardscape', label: 'Hardscape Clean',  start: 65, peak: 75, exit: 84 },
+      { id: 'turf',      label: 'Mowing.',    start: 8,  peak: 22, exit: 84 },
+      { id: 'trees',     label: 'Pruning.',   start: 24, peak: 36, exit: 84 },
+      { id: 'beds',      label: 'Planting.',  start: 38, peak: 50, exit: 84 },
+      { id: 'drainage',  label: 'Clearing.',  start: 52, peak: 63, exit: 84 },
+      { id: 'hardscape', label: 'Cleaning.',  start: 65, peak: 75, exit: 84 },
     ];
 
     /* ── Initial states ────────────────────────────────────────────────── */
     /* before: already dark via CSS filter */
-    gsap.set('.te-after',          { clipPath: 'inset(100% 0 0 0)' });
-    gsap.set('.te-complete-msg',   { opacity: 0 });
-    gsap.set('.te-active-display', { opacity: 0 });
+    gsap.set('.te-after',        { clipPath: 'inset(100% 0 0 0)' });
+    gsap.set('.te-complete-msg', { opacity: 0 });
+    gsap.set('.te-word',         { opacity: 0 });
 
     /* All zone reveals + outlines start invisible */
     SYSTEMS.forEach(sys => {
@@ -64,16 +64,14 @@
 
     /* Grand reveal — full maintained photo wipes up */
     tl
-      .to('.te-before',        { opacity: 0, filter: 'brightness(0.2) saturate(0)', duration: 7 }, 82)
-      .to('.te-active-display',{ opacity: 0, duration: 4 },                                        80)
-      .to('.te-after',         { clipPath: 'inset(0% 0 0 0)', duration: 12, ease: 'power1.inOut' }, 85)
+      .to('.te-before', { opacity: 0, filter: 'brightness(0.2) saturate(0)', duration: 7 }, 82)
+      .to('.te-word',   { opacity: 0, duration: 4 },                                        80)
+      .to('.te-after',  { clipPath: 'inset(0% 0 0 0)', duration: 12, ease: 'power1.inOut' }, 85)
       .to('.te-complete-msg',  { opacity: 1, duration: 7 },                                        93)
       .to('.te-progress-fill', { width: '100%', duration: 100 },                                    0);
 
     /* ── ScrollTrigger ─────────────────────────────────────────────────── */
-    const adSystem  = section.querySelector('.te-ad-system');
-    const adDisplay = section.querySelector('.te-active-display');
-
+    const word = section.querySelector('.te-word');
     let lastSysIdx = -2;
     let lastLabel  = '';
 
@@ -87,7 +85,6 @@
       onUpdate (self) {
         const p = self.progress * 100;
 
-        /* Which system is currently active? */
         let activeSysIdx = -1;
         SYSTEMS.forEach((sys, i) => {
           if (p >= sys.start && p < sys.exit) activeSysIdx = i;
@@ -96,31 +93,21 @@
         if (activeSysIdx === lastSysIdx) return;
         lastSysIdx = activeSysIdx;
 
-        /* Update tracker dots */
-        SYSTEMS.forEach((sys, i) => {
-          const item = section.querySelector(`.te-tracker-item[data-system="${sys.id}"]`);
-          if (!item) return;
-          const passed  = p >= sys.peak;
-          const current = i === activeSysIdx;
-          item.classList.toggle('done',   passed && !current);
-          item.classList.toggle('active', current);
-        });
-
-        /* Show/hide + update stage name */
         if (p < 8 || p >= 82) {
-          gsap.to(adDisplay, { opacity: 0, duration: 0.35 });
+          if (word) gsap.to(word, { opacity: 0, duration: 0.35 });
         } else if (activeSysIdx >= 0) {
           const label = SYSTEMS[activeSysIdx].label;
-          gsap.to(adDisplay, { opacity: 1, duration: 0.4 });
-          if (label !== lastLabel && adSystem) {
+          if (label !== lastLabel && word) {
             lastLabel = label;
-            gsap.to(adSystem, {
-              opacity: 0, duration: 0.14,
+            gsap.to(word, {
+              opacity: 0, y: 12, duration: 0.14,
               onComplete () {
-                adSystem.textContent = label;
-                gsap.to(adSystem, { opacity: 1, duration: 0.22 });
+                word.textContent = label;
+                gsap.fromTo(word, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' });
               }
             });
+          } else if (word) {
+            gsap.to(word, { opacity: 1, duration: 0.4 });
           }
         }
       }
@@ -140,36 +127,11 @@
     if (!section) return;
 
     const ZONES = {
-      turf: {
-        label: 'Turf & Lawn',
-        swatch: 'linear-gradient(135deg,#5a8a38,#7ab858)',
-        desc: 'Precision mowing, fertilization, aeration and drought management. The foundation of every first impression.',
-        services: ['Commercial Mowing', 'Fertilization', 'Aeration', 'Drought Control'],
-      },
-      trees: {
-        label: 'Trees & Canopy',
-        swatch: 'linear-gradient(135deg,#2d5a28,#4a8040)',
-        desc: 'Structural pruning, storm-risk reduction and canopy health. Mature trees managed as assets, not hazards.',
-        services: ['Structural Pruning', 'Canopy Health', 'Storm Assessment', 'Stump Removal'],
-      },
-      hardscape: {
-        label: 'Hardscape & Access',
-        swatch: 'linear-gradient(135deg,#b8943c,#d4aa50)',
-        desc: 'Pressure-washed entries, edged curbs, salt-cleared walkways. Every surface your clients physically touch.',
-        services: ['Pressure Washing', 'Edging & Curbs', 'Salt Removal', 'Surface Inspection'],
-      },
-      beds: {
-        label: 'Landscape Beds',
-        swatch: 'linear-gradient(135deg,#9a7430,#c4963e)',
-        desc: 'Seasonal color, annual mulch, weed control and perennial management. The signature of an institution that cares.',
-        services: ['Seasonal Color', 'Mulch Install', 'Weed Control', 'Bed Edging'],
-      },
-      drainage: {
-        label: 'Drainage & Infrastructure',
-        swatch: 'linear-gradient(135deg,#2a6a9a,#4a8aba)',
-        desc: 'Storm drain maintenance, grade correction and 24-hour storm response. Managed before flooding becomes damage.',
-        services: ['Catch Basins', 'Grade Correction', 'French Drain', '24hr Response'],
-      },
+      turf:      { label: 'Turf',      swatch: 'linear-gradient(135deg,#5a8a38,#7ab858)', desc: 'The foundation of every first impression.' },
+      trees:     { label: 'Canopy',    swatch: 'linear-gradient(135deg,#2d5a28,#4a8040)', desc: 'Mature trees managed as assets, not hazards.' },
+      hardscape: { label: 'Hardscape', swatch: 'linear-gradient(135deg,#b8943c,#d4aa50)', desc: 'Every surface your tenants physically touch.' },
+      beds:      { label: 'Beds',      swatch: 'linear-gradient(135deg,#9a7430,#c4963e)', desc: 'The detail that signals an institution that cares.' },
+      drainage:  { label: 'Drainage',  swatch: 'linear-gradient(135deg,#2a6a9a,#4a8aba)', desc: 'Managed before flooding becomes damage.' },
     };
 
     const inner     = section.querySelector('.pm-inner');
@@ -177,7 +139,6 @@
     const ipSwatch  = section.querySelector('.pm-ip-swatch');
     const ipName    = section.querySelector('.pm-ip-name');
     const ipDesc    = section.querySelector('.pm-ip-desc');
-    const ipSvcs    = section.querySelector('.pm-ip-services');
     const hint      = section.querySelector('.pm-hint');
 
     let active = null;
@@ -194,9 +155,8 @@
       if (target) target.classList.add('pm-active');
 
       if (ipSwatch)  ipSwatch.style.background = data.swatch;
-      if (ipName)    ipName.textContent  = data.label;
-      if (ipDesc)    ipDesc.textContent  = data.desc;
-      if (ipSvcs)    ipSvcs.innerHTML    = data.services.map(s => `<div class="pm-ip-tag">${s}</div>`).join('');
+      if (ipName)    ipName.textContent = data.label;
+      if (ipDesc)    ipDesc.textContent = data.desc;
       if (infoPanel) infoPanel.classList.add('visible');
       if (hint)      hint.classList.add('hidden');
     }
