@@ -171,11 +171,58 @@
 
     section.querySelectorAll('.pm-zone').forEach(g => {
       const name = g.dataset.zone;
-      g.addEventListener('mouseenter', () => activateZone(name));
-      g.addEventListener('mouseleave', clearZones);
-      g.addEventListener('focus',      () => activateZone(name));
-      g.addEventListener('blur',       clearZones);
+      g.addEventListener('mouseenter', () => { stopAmbient(); activateZone(name); });
+      g.addEventListener('mouseleave', () => { clearZones(); startAmbient(); });
+      g.addEventListener('focus',      () => { stopAmbient(); activateZone(name); });
+      g.addEventListener('blur',       () => { clearZones(); startAmbient(); });
     });
+
+    /* Ambient zone cycle — property stays alive when no one is hovering.
+       Cycles through each zone with a very faint glow, like a live
+       monitoring system slowly scanning its own systems.              */
+    const AMBIENT_ORDER = ['turf', 'trees', 'hardscape', 'beds', 'drainage'];
+    let ambientIdx = 0;
+    let ambientTimer = null;
+
+    function pulseZone() {
+      const zoneName = AMBIENT_ORDER[ambientIdx % AMBIENT_ORDER.length];
+      const zoneEl   = section.querySelector(`.pm-zone[data-zone="${zoneName}"]`);
+      if (zoneEl) {
+        const shapes = zoneEl.querySelectorAll('.pm-z-shape');
+        const strokes = zoneEl.querySelectorAll('.pm-z-stroke');
+        gsap.fromTo(shapes,
+          { attr: { 'fill-opacity': 0 } },
+          { attr: { 'fill-opacity': 0.1 }, duration: 1.4, ease: 'power2.inOut',
+            onComplete() {
+              gsap.to(shapes, { attr: { 'fill-opacity': 0 }, duration: 2, ease: 'power2.inOut' });
+            }
+          }
+        );
+        gsap.fromTo(strokes,
+          { attr: { 'stroke-opacity': 0 } },
+          { attr: { 'stroke-opacity': 0.2 }, duration: 1.4, ease: 'power2.inOut',
+            onComplete() {
+              gsap.to(strokes, { attr: { 'stroke-opacity': 0 }, duration: 2, ease: 'power2.inOut' });
+            }
+          }
+        );
+      }
+      ambientIdx++;
+    }
+
+    function startAmbient() {
+      if (ambientTimer) return;
+      pulseZone();
+      ambientTimer = setInterval(pulseZone, 3200);
+    }
+
+    function stopAmbient() {
+      clearInterval(ambientTimer);
+      ambientTimer = null;
+    }
+
+    /* Start ambient cycle after a short delay */
+    setTimeout(startAmbient, 1800);
 
     /* Fade section in on scroll arrival */
     gsap.fromTo(section, { opacity: 0 }, {

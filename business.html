@@ -37,20 +37,20 @@
          HERO  (100vh — entrance into the narrative)
     ═══════════════════════════════════════════════════════════════════ -->
     <section id="hero" aria-labelledby="hero-heading">
-      <div class="hero-bg" aria-hidden="true"></div>
+      <!-- Neglected property — base state, always visible -->
+      <div class="hero-neglected hero-photo-layer" aria-hidden="true"></div>
+      <!-- Maintained property — reveals only where the cursor explores -->
+      <div class="hero-maintained hero-photo-layer" aria-hidden="true"></div>
       <div class="hero-overlay" aria-hidden="true"></div>
 
       <div class="hero-content">
-        <p class="hero-eyebrow">Commercial &amp; Government Property Maintenance</p>
         <h1 id="hero-heading">
           The Standard<br>
           Every Property<br>
           <em>Deserves.</em>
         </h1>
-        <p class="hero-sub">Neglected properties become maintained assets. Scroll to see how.</p>
         <div class="hero-actions">
           <a href="#contact" class="btn-primary">Request a Quote →</a>
-          <a href="#transformation-story" class="btn-secondary">Our Process ↓</a>
         </div>
       </div>
 
@@ -222,6 +222,7 @@
         <!-- Aerial photo base — the property IS the interface -->
         <div class="pm-photo" aria-hidden="true"></div>
         <div class="pm-photo-overlay" aria-hidden="true"></div>
+        <div class="pm-scan" aria-hidden="true"></div>
 
         <!-- Interactive SVG zones — hover each to activate -->
         <svg class="pm-svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"
@@ -375,9 +376,7 @@
               <div class="cs-stat" role="listitem"><strong>+40%</strong><span>Tenant<br>Satisfaction</span></div>
             </div>
             <div class="cs-story">
-              <p class="cs-line">A neglected 14-acre commercial campus — degraded turf, failing drainage infrastructure, overgrown beds losing the property clients.</p>
-              <p class="cs-line">We deployed a phased rehabilitation: correcting drainage first, amending soil, then executing a full landscape renovation over one growing season.</p>
-              <p class="cs-line">The campus is now the flagship property in its management portfolio — <strong>a measurable asset, not a liability.</strong></p>
+              <p class="cs-line">Rehabilitated in one growing season. <strong>Now the flagship in its portfolio.</strong></p>
             </div>
           </div>
 
@@ -397,9 +396,7 @@
               <div class="cs-stat" role="listitem"><strong>100%</strong><span>On-Time<br>Record</span></div>
             </div>
             <div class="cs-story">
-              <p class="cs-line">A government facility requiring uninterrupted grounds maintenance year-round — with zero tolerance for missed service windows or visible neglect.</p>
-              <p class="cs-line">L&amp;M built a 52-week rotating program: spring cleanup and seeding, summer precision turf management, fall leaf programs, and full winter snow and ice response.</p>
-              <p class="cs-line">Five contract renewals. Not a single missed week. <strong>The standard all government properties deserve.</strong></p>
+              <p class="cs-line">Five renewals. Not a single missed week. <strong>The standard all government properties deserve.</strong></p>
             </div>
           </div>
 
@@ -419,9 +416,7 @@
               <div class="cs-stat" role="listitem"><strong>0</strong><span>Flooding<br>Incidents</span></div>
             </div>
             <div class="cs-story">
-              <p class="cs-line">A mixed-use development suffering from chronic flooding, eroded walkways, and a landscape deterring retail tenants and foot traffic.</p>
-              <p class="cs-line">We designed and installed a complete stormwater management system, rebuilt eight drainage channels, and transformed the surrounding grounds into a landmark landscape.</p>
-              <p class="cs-line">Zero flooding incidents since installation. <strong>Full occupancy achieved within six months.</strong></p>
+              <p class="cs-line">Zero flooding incidents since installation. <strong>Full occupancy within six months.</strong></p>
             </div>
           </div>
 
@@ -444,14 +439,9 @@
       <div class="contact-grid">
 
         <div class="contact-info">
-          <p class="section-label reveal">Get in Touch</p>
-          <h2 id="contact-heading" class="reveal reveal-delay-1">
+          <h2 id="contact-heading" class="reveal">
             Let's Talk<br>About Your<br><em>Property.</em>
           </h2>
-          <p class="reveal reveal-delay-2">
-            We respond to all commercial inquiries within one business day.
-            Tell us about your property and we'll put together a tailored maintenance program.
-          </p>
           <div class="contact-details">
             <div class="contact-item reveal reveal-delay-2">
               <span class="contact-item-icon" aria-hidden="true">📞</span>

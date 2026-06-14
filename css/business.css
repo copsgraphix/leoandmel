@@ -93,16 +93,36 @@ section { position: relative; }
   overflow: hidden;
 }
 
-.hero-bg {
+/* Shared layer base */
+.hero-photo-layer {
   position: absolute;
   inset: -8%;
-  background: url('../perfectly maintained.jpeg') center/cover no-repeat;
-  animation: heroZoom 18s ease-in-out infinite alternate;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
 }
 
+/* Neglected base — still, desaturated, abandoned */
+.hero-neglected {
+  background-image: url('../unkept house.jpeg');
+  z-index: 1;
+  filter: brightness(0.32) saturate(0.15) sepia(0.3);
+}
+
+/* Maintained layer — only where the cursor reveals it */
+.hero-maintained {
+  background-image: url('../perfectly maintained.jpeg');
+  z-index: 2;
+  filter: brightness(0.72) saturate(1.1);
+  animation: heroZoom 22s ease-in-out infinite alternate;
+  clip-path: circle(var(--hero-radius, 0%) at var(--hero-cx, 50%) var(--hero-cy, 40%));
+}
+
+#hero { --hero-cx: 50%; --hero-cy: 40%; --hero-radius: 0%; }
+
 @keyframes heroZoom {
-  from { transform: scale(1);    filter: brightness(0.55); }
-  to   { transform: scale(1.08); filter: brightness(0.5);  }
+  from { transform: scale(1);    }
+  to   { transform: scale(1.07); }
 }
 
 .hero-overlay {
@@ -1018,6 +1038,16 @@ footer {
 }
 
 .footer-links a:hover { color: rgba(255,255,255,0.65); }
+
+/* ─── Touch devices: no cursor, show maintained property directly ──────── */
+@media (pointer: coarse) {
+  .hero-neglected { display: none; }
+  .hero-maintained {
+    clip-path: none !important;
+    filter: brightness(0.58) saturate(1.05);
+    animation: heroZoom 22s ease-in-out infinite alternate;
+  }
+}
 
 /* ─── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {

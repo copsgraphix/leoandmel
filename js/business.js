@@ -51,14 +51,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ── Hero parallax ────────────────────────────────────────────────────── */
-  const heroBg = document.querySelector('.hero-bg');
-  if (heroBg) {
+  /* ── Hero: cursor flashlight + scroll parallax ────────────────────────
+     Neglected property is the base. The maintained version is hidden
+     behind clip-path: circle(0%). Moving the cursor opens a spotlight
+     at cursor position — the property reveals its potential wherever
+     the user explores. No words needed to explain what L&M delivers.  */
+  const heroSection   = document.getElementById('hero');
+  const photoLayers   = document.querySelectorAll('.hero-photo-layer');
+
+  if (heroSection && photoLayers.length) {
+    /* Scroll parallax applies to both layers so they stay aligned */
     window.addEventListener('scroll', () => {
       if (window.scrollY < window.innerHeight) {
-        heroBg.style.transform = `translateY(${window.scrollY * 0.28}px)`;
+        const ty = window.scrollY * 0.26;
+        photoLayers.forEach(l => { l.style.transform = `translateY(${ty}px)`; });
       }
     }, { passive: true });
+
+    /* Cursor flashlight — pure rAF lerp, no GSAP needed */
+    let curR = 0, tgtR = 0;
+    let rafId = null;
+
+    function animateRadius() {
+      curR += (tgtR - curR) * 0.09;
+      heroSection.style.setProperty('--hero-radius', curR.toFixed(2) + '%');
+      if (Math.abs(tgtR - curR) > 0.04) {
+        rafId = requestAnimationFrame(animateRadius);
+      } else {
+        heroSection.style.setProperty('--hero-radius', tgtR + '%');
+        rafId = null;
+      }
+    }
+
+    function startAnim() {
+      if (!rafId) rafId = requestAnimationFrame(animateRadius);
+    }
+
+    heroSection.addEventListener('mousemove', (e) => {
+      const r = heroSection.getBoundingClientRect();
+      heroSection.style.setProperty('--hero-cx', ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%');
+      heroSection.style.setProperty('--hero-cy', ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%');
+      if (tgtR !== 22) { tgtR = 22; startAnim(); }
+    });
+
+    heroSection.addEventListener('mouseleave', () => { tgtR = 0; startAnim(); });
   }
 
   /* ── Wait for GSAP, then wire scroll animations ───────────────────────── */
@@ -102,27 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ── Hero content — scrub in as user scrolls down from top ─────────── */
-  const heroContent = document.querySelector('.hero-content');
-  if (heroContent) {
-    /* Children of hero-content stagger in as page loads / first scroll */
-    gsap.fromTo('.hero-eyebrow',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, ease: 'power2.out', duration: 1.0, delay: 0.4 }
-    );
-    gsap.fromTo('#hero-heading',
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, ease: 'power2.out', duration: 1.2, delay: 0.7 }
-    );
-    gsap.fromTo('.hero-sub',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, ease: 'power2.out', duration: 1.0, delay: 1.0 }
-    );
-    gsap.fromTo('.hero-actions',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, ease: 'power2.out', duration: 0.9, delay: 1.3 }
-    );
-  }
+  /* ── Hero content entrance ───────────────────────────────────────────── */
+  gsap.fromTo('#hero-heading',
+    { opacity: 0, y: 55 },
+    { opacity: 1, y: 0, ease: 'power2.out', duration: 1.3, delay: 0.5 }
+  );
+  gsap.fromTo('.hero-actions',
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, ease: 'power2.out', duration: 1.0, delay: 1.0 }
+  );
 
   /* ── Service cards — stagger in together when grid enters viewport ─── */
   const serviceCards = document.querySelectorAll('.service-card');
