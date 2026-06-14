@@ -210,6 +210,60 @@
   filter: drop-shadow(0 0 16px rgba(55,150,230,0.6));
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   ZONE HOVER EFFECTS — The property responds to inspection.
+   Each zone has unique visual feedback that reflects what's actually
+   happening in that system: grass lines, trimmed canopy, flowing water,
+   cleaned surface, rich soil. Pure CSS — no JS changes required.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.pm-effect { pointer-events: none; }
+
+/* All effect elements hidden by default — staggered reveal timing */
+.pm-eff {
+  opacity: 0;
+  transition: opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.pm-eff-a { transition-delay: 0s; }
+.pm-eff-b { transition-delay: 0.14s; }
+.pm-eff-c { transition-delay: 0.28s; }
+
+/* Activate all effects when zone is engaged */
+.pm-zone.pm-active .pm-eff { opacity: 1; }
+
+/* Turf: inner trim circles scale in slightly to suggest pruned edges */
+.pm-eff-trim {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: scale(1.06);
+}
+.pm-zone.pm-active .pm-eff-trim { transform: scale(1); }
+
+/* ── Water flow animation ─────────────────────────────────────────────── */
+@keyframes pm-water {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -52; }
+}
+.pm-zone.pm-active .pm-eff-water {
+  animation: pm-water 1.5s linear infinite;
+}
+
+/* ── Basin ripple animation ───────────────────────────────────────────── */
+@keyframes pm-ripple {
+  0%   { transform: scale(0.65); opacity: 0;    stroke-width: 3;   }
+  14%  { opacity: 0.65; }
+  100% { transform: scale(2.2);  opacity: 0;    stroke-width: 0.4; }
+}
+.pm-eff-ripple {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.pm-zone.pm-active .pm-eff-ripple {
+  animation: pm-ripple 2.5s ease-out infinite;
+}
+
 /* ── Info panel (slides up from bottom on hover) ─────────────────────── */
 .pm-info-panel {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;

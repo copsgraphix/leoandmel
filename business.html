@@ -228,14 +228,34 @@
         <svg class="pm-svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"
              role="img" aria-label="Aerial commercial property map with interactive service zones">
 
-          <!-- TURF & LAWN — surrounding ground areas -->
+          <defs>
+            <!-- Turf: horizontal mowing-stripe pattern -->
+            <pattern id="pm-mow" x="0" y="0" width="1920" height="28" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="14" x2="1920" y2="14" stroke="rgba(255,255,255,0.07)" stroke-width="1.5"/>
+            </pattern>
+            <!-- Hardscape: diagonal surface-sheen pattern -->
+            <pattern id="pm-sheen" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="64" x2="64" y2="0" stroke="rgba(255,255,255,0.042)" stroke-width="1"/>
+            </pattern>
+          </defs>
+
+          <!-- TURF & LAWN -->
           <g class="pm-zone" data-zone="turf" tabindex="0" role="button" aria-label="Turf and lawn zone">
-            <polygon points="0,360 340,360 340,1080 0,1080" class="pm-z-shape"/>
-            <polygon points="1580,360 1920,360 1920,1080 1580,1080" class="pm-z-shape"/>
-            <rect x="340" y="740" width="1240" height="340" class="pm-z-shape"/>
+            <polygon points="0,360 340,360 340,1080 0,1080"           class="pm-z-shape"/>
+            <polygon points="1580,360 1920,360 1920,1080 1580,1080"   class="pm-z-shape"/>
+            <rect x="340" y="740" width="1240" height="340"           class="pm-z-shape"/>
+            <!-- Grass sharpens + mowing lines appear -->
+            <g class="pm-effect" pointer-events="none">
+              <polygon points="0,360 340,360 340,1080 0,1080"         fill="url(#pm-mow)"          class="pm-eff pm-eff-a"/>
+              <polygon points="1580,360 1920,360 1920,1080 1580,1080" fill="url(#pm-mow)"          class="pm-eff pm-eff-b"/>
+              <rect x="340" y="740" width="1240" height="340"         fill="url(#pm-mow)"          class="pm-eff pm-eff-c"/>
+              <polygon points="0,360 340,360 340,1080 0,1080"         fill="rgba(52,170,38,0.14)"  class="pm-eff pm-eff-a"/>
+              <polygon points="1580,360 1920,360 1920,1080 1580,1080" fill="rgba(52,170,38,0.14)"  class="pm-eff pm-eff-b"/>
+              <rect x="340" y="740" width="1240" height="340"         fill="rgba(52,170,38,0.10)"  class="pm-eff pm-eff-c"/>
+            </g>
           </g>
 
-          <!-- TREES & CANOPY — circles in corners and along front edge -->
+          <!-- TREES & CANOPY -->
           <g class="pm-zone" data-zone="trees" tabindex="0" role="button" aria-label="Trees and canopy zone">
             <circle cx="195"  cy="490" r="115" class="pm-z-shape"/>
             <circle cx="55"   cy="725" r="82"  class="pm-z-shape"/>
@@ -244,30 +264,66 @@
             <circle cx="455"  cy="945" r="78"  class="pm-z-shape"/>
             <circle cx="960"  cy="958" r="66"  class="pm-z-shape"/>
             <circle cx="1465" cy="945" r="78"  class="pm-z-shape"/>
+            <!-- Canopy brightens + inner trim circles appear -->
+            <g class="pm-effect" pointer-events="none">
+              <circle cx="195"  cy="490" r="94"  fill="rgba(95,210,72,0.20)"  class="pm-eff pm-eff-a pm-eff-trim"/>
+              <circle cx="55"   cy="725" r="66"  fill="rgba(95,210,72,0.20)"  class="pm-eff pm-eff-b pm-eff-trim"/>
+              <circle cx="1725" cy="490" r="94"  fill="rgba(95,210,72,0.20)"  class="pm-eff pm-eff-a pm-eff-trim"/>
+              <circle cx="1865" cy="725" r="66"  fill="rgba(95,210,72,0.20)"  class="pm-eff pm-eff-b pm-eff-trim"/>
+              <circle cx="455"  cy="945" r="63"  fill="rgba(95,210,72,0.17)"  class="pm-eff pm-eff-b pm-eff-trim"/>
+              <circle cx="960"  cy="958" r="52"  fill="rgba(95,210,72,0.17)"  class="pm-eff pm-eff-c pm-eff-trim"/>
+              <circle cx="1465" cy="945" r="63"  fill="rgba(95,210,72,0.17)"  class="pm-eff pm-eff-b pm-eff-trim"/>
+            </g>
           </g>
 
-          <!-- HARDSCAPE & ACCESS — central walkways and entry -->
+          <!-- HARDSCAPE & ACCESS -->
           <g class="pm-zone" data-zone="hardscape" tabindex="0" role="button" aria-label="Hardscape and access zone">
             <rect x="862" y="488" width="196" height="272" class="pm-z-shape"/>
             <rect x="748" y="742" width="424" height="78"  class="pm-z-shape"/>
             <rect x="900" y="820" width="120" height="260" class="pm-z-shape"/>
+            <!-- Surface becomes cleaner + debris fades -->
+            <g class="pm-effect" pointer-events="none">
+              <rect x="862" y="488" width="196" height="272" fill="url(#pm-sheen)"         class="pm-eff pm-eff-a"/>
+              <rect x="748" y="742" width="424" height="78"  fill="url(#pm-sheen)"         class="pm-eff pm-eff-b"/>
+              <rect x="900" y="820" width="120" height="260" fill="url(#pm-sheen)"         class="pm-eff pm-eff-c"/>
+              <rect x="862" y="488" width="196" height="272" fill="rgba(238,222,185,0.16)" class="pm-eff pm-eff-a"/>
+              <rect x="748" y="742" width="424" height="78"  fill="rgba(238,222,185,0.16)" class="pm-eff pm-eff-b"/>
+              <rect x="900" y="820" width="120" height="260" fill="rgba(238,222,185,0.16)" class="pm-eff pm-eff-c"/>
+            </g>
           </g>
 
-          <!-- LANDSCAPE BEDS — strips along building facades -->
+          <!-- LANDSCAPE BEDS -->
           <g class="pm-zone" data-zone="beds" tabindex="0" role="button" aria-label="Landscape beds zone">
             <rect x="524"  y="460" width="338" height="36" rx="5" class="pm-z-shape"/>
             <rect x="1058" y="460" width="338" height="36" rx="5" class="pm-z-shape"/>
             <ellipse cx="862"  cy="735" rx="82" ry="24" class="pm-z-shape"/>
             <ellipse cx="1058" cy="735" rx="82" ry="24" class="pm-z-shape"/>
+            <!-- Mulch deepens + plant colors become richer -->
+            <g class="pm-effect" pointer-events="none">
+              <rect x="524"  y="460" width="338" height="36" rx="5" fill="rgba(108,56,14,0.36)"  class="pm-eff pm-eff-a pm-eff-mulch"/>
+              <rect x="1058" y="460" width="338" height="36" rx="5" fill="rgba(108,56,14,0.36)"  class="pm-eff pm-eff-b pm-eff-mulch"/>
+              <ellipse cx="862"  cy="735" rx="82" ry="24"          fill="rgba(34,152,52,0.32)"  class="pm-eff pm-eff-b pm-eff-plant"/>
+              <ellipse cx="1058" cy="735" rx="82" ry="24"          fill="rgba(34,152,52,0.32)"  class="pm-eff pm-eff-c pm-eff-plant"/>
+            </g>
           </g>
 
-          <!-- DRAINAGE — perimeter channel and basin nodes -->
+          <!-- DRAINAGE -->
           <g class="pm-zone" data-zone="drainage" tabindex="0" role="button" aria-label="Drainage zone">
             <path d="M 0,1042 Q 320,1002 640,1022 T 1280,1012 T 1920,1042"
                   stroke-width="42" class="pm-z-stroke"/>
             <circle cx="480"  cy="1018" r="33" class="pm-z-shape"/>
             <circle cx="960"  cy="1010" r="33" class="pm-z-shape"/>
             <circle cx="1440" cy="1018" r="33" class="pm-z-shape"/>
+            <!-- Animated water flow + basin ripples -->
+            <g class="pm-effect" pointer-events="none">
+              <path d="M 0,1042 Q 320,1002 640,1022 T 1280,1012 T 1920,1042"
+                    stroke="rgba(58,148,228,0.75)" stroke-width="5" fill="none"
+                    stroke-linecap="round" stroke-dasharray="14 38"
+                    class="pm-eff pm-eff-a pm-eff-water"/>
+              <circle cx="480"  cy="1018" r="24" fill="none" stroke="rgba(58,148,228,0.65)" stroke-width="2.5" class="pm-eff pm-eff-ripple"/>
+              <circle cx="960"  cy="1010" r="24" fill="none" stroke="rgba(58,148,228,0.65)" stroke-width="2.5" class="pm-eff pm-eff-ripple" style="animation-delay:0.65s"/>
+              <circle cx="1440" cy="1018" r="24" fill="none" stroke="rgba(58,148,228,0.65)" stroke-width="2.5" class="pm-eff pm-eff-ripple" style="animation-delay:1.3s"/>
+            </g>
           </g>
 
           <!-- Buildings (non-interactive) -->
