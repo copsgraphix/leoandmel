@@ -50,30 +50,66 @@
     /* ── Master timeline (100 units → 350vh of scroll) ─────────────────── */
     const tl = gsap.timeline({ defaults: { ease: 'none' } });
 
-    /* Slight colour warm-up during establish phase */
-    tl.to('.te-before', { filter: 'brightness(0.48) saturate(0.28) sepia(0.18)', duration: 8 }, 0);
+    /* Stage 0: Establish — property is cold, dead, abandoned */
+    tl.to('.te-before', { filter: 'brightness(0.38) saturate(0.22) sepia(0.28)', duration: 8 }, 0);
 
     SYSTEMS.forEach(sys => {
-      /* Reveal the maintained photo through the zone's clip-path */
       tl.to(`#te-reveal-${sys.id}`,  { opacity: 1, duration: sys.peak - sys.start },         sys.start);
       tl.to(`#te-outline-${sys.id}`, { opacity: 1, duration: (sys.peak - sys.start) * 0.6 }, sys.start);
-      /* Zone fades at grand-reveal phase */
       tl.to(`#te-reveal-${sys.id}`,  { opacity: 0, duration: 5 }, sys.exit);
       tl.to(`#te-outline-${sys.id}`, { opacity: 0, duration: 4 }, sys.exit);
     });
 
-    /* Grand reveal — full maintained photo wipes up */
+    /* Progressive lighting & color grading — property comes back to life stage by stage.
+       Each restoration milestone shifts the base image toward natural light. */
     tl
-      .to('.te-before', { opacity: 0, filter: 'brightness(0.2) saturate(0)', duration: 7 }, 82)
-      .to('.te-word',   { opacity: 0, duration: 4 },                                        80)
-      .to('.te-after',  { clipPath: 'inset(0% 0 0 0)', duration: 12, ease: 'power1.inOut' }, 85)
-      .to('.te-complete-msg',  { opacity: 1, duration: 7 },                                        93)
-      .to('.te-progress-fill', { width: '100%', duration: 100 },                                    0);
+      .to('.te-before', { filter: 'brightness(0.43) saturate(0.30) sepia(0.20)', duration: 10 }, 22) // turf done
+      .to('.te-before', { filter: 'brightness(0.47) saturate(0.38) sepia(0.13)', duration: 10 }, 36) // trees done
+      .to('.te-before', { filter: 'brightness(0.51) saturate(0.45) sepia(0.07)', duration: 10 }, 50) // beds done
+      .to('.te-before', { filter: 'brightness(0.55) saturate(0.51) sepia(0.02)', duration: 10 }, 63) // drainage done
+      .to('.te-before', { filter: 'brightness(0.60) saturate(0.56) sepia(0)',    duration: 10 }, 75); // hardscape done
+
+    /* Grand reveal — all zone reveals fade, maintained photo wipes up from bottom */
+    tl
+      .to('.te-word',   { opacity: 0, duration: 4 },                                             80)
+      .to('.te-before', { opacity: 0, filter: 'brightness(0.15) saturate(0)', duration: 7 },     82)
+      .to('.te-after',  { clipPath: 'inset(0% 0 0 0)', duration: 9, ease: 'power1.inOut' },      85)
+      .to('.te-progress-fill', { width: '100%', duration: 100 },                                   0);
+
+    /* COMPLETE is triggered via scroll lock at 93% — handled in onUpdate, not the timeline */
 
     /* ── ScrollTrigger ─────────────────────────────────────────────────── */
     const word = section.querySelector('.te-word');
-    let lastSysIdx = -2;
-    let lastLabel  = '';
+    let lastSysIdx    = -2;
+    let lastLabel     = '';
+    let completionFired = false;
+
+    /* Scroll-lock completion — fires once, holds 3+ seconds, then releases */
+    function triggerCompletion() {
+      /* Block all scroll input */
+      const onWheel = e => e.preventDefault();
+      const onTouch = e => e.preventDefault();
+      window.addEventListener('wheel',     onWheel, { passive: false });
+      window.addEventListener('touchmove', onTouch, { passive: false });
+
+      /* Dramatic entrance: scale up from slightly below center */
+      gsap.fromTo('.te-complete-msg',
+        { opacity: 0, scale: 0.86, y: 32 },
+        { opacity: 1, scale: 1,    y: 0, duration: 1.1, ease: 'power3.out', delay: 0.1 }
+      );
+
+      /* Hold ~3 seconds at full visibility, then fade and release */
+      setTimeout(() => {
+        gsap.to('.te-complete-msg', {
+          opacity: 0, scale: 0.96, y: -18,
+          duration: 0.7, ease: 'power2.in',
+          onComplete () {
+            window.removeEventListener('wheel',     onWheel);
+            window.removeEventListener('touchmove', onTouch);
+          }
+        });
+      }, 4100); /* 0.1 delay + 1.1 entrance + ~2.9s visible hold */
+    }
 
     ScrollTrigger.create({
       trigger: '#transformation-story',
@@ -84,6 +120,12 @@
 
       onUpdate (self) {
         const p = self.progress * 100;
+
+        /* Fire the completion lock once when te-after is fully revealed */
+        if (p >= 93 && !completionFired) {
+          completionFired = true;
+          triggerCompletion();
+        }
 
         let activeSysIdx = -1;
         SYSTEMS.forEach((sys, i) => {
