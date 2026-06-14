@@ -31,12 +31,22 @@ businessSide.addEventListener('touchstart', (e) => {
   e.preventDefault();
   onEnter(businessSide, personalSide);
 }, { passive: false });
+businessSide.addEventListener('touchend', (e) => {
+  if (locked) return;
+  e.preventDefault();
+  selectExperience('business');
+});
 
 personalSide.addEventListener('touchstart', (e) => {
   if (locked) return;
   e.preventDefault();
   onEnter(personalSide, businessSide);
 }, { passive: false });
+personalSide.addEventListener('touchend', (e) => {
+  if (locked) return;
+  e.preventDefault();
+  selectExperience('personal');
+});
 
 /* ── Select & transition ─────────────────────────────────────────────────── */
 function selectExperience(type) {
